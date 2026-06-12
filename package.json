@@ -3,13 +3,15 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "main": "electron/main.js",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "concurrently \"vite\" \"electron .\"",
+    "build": "vite build && electron-builder",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@radix-ui/react-slot": "^1.2.5",
     "better-sqlite3": "^12.10.0",
     "chokidar": "^5.0.0",
     "class-variance-authority": "^0.7.1",

@@ -21,8 +21,8 @@ function createWindow() {
   });
 
   // Check if we are running in dev or prod
-  if (process.env.VITE_DEV_SERVER_URL) {
-    mainWindow.loadURL(process.env.VITE_DEV_SERVER_URL);
+  if (!app.isPackaged) {
+    mainWindow.loadURL('http://localhost:5173');
     mainWindow.webContents.openDevTools();
   } else {
     // In production, Vite builds to dist/

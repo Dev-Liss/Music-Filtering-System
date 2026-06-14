@@ -79,10 +79,10 @@ function App() {
                 <button
                   key={item.id}
                   onClick={() => setCurrentView(item.id)}
-                  className={`flex items-center transition-all duration-300 group relative focus:outline-none overflow-hidden ${
+                  className={`flex items-center transition-all duration-300 group relative focus:outline-none overflow-hidden h-12 ${
                     isCollapsed
-                      ? "w-12 h-12 rounded-xl mx-auto pl-[14px]"
-                      : "w-full pl-6 pr-4 py-3 rounded-l-none rounded-r-full"
+                      ? "w-12 rounded-xl mx-auto pl-[14px]"
+                      : "w-full pl-6 pr-4 rounded-l-none rounded-r-[24px]"
                   } ${
                     isActive
                       ? "bg-[#00f59b] text-[#090d16] shadow-md shadow-[#00f59b]/25 font-semibold"

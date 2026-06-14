@@ -29,8 +29,8 @@ function App() {
       >
         <div>
           <div
-            className={`h-16 flex items-center border-b border-border transition-all duration-300 relative group/header ${
-              isCollapsed ? "justify-center" : "justify-between px-4"
+            className={`h-16 flex items-center border-b border-border transition-all duration-300 relative group/header overflow-hidden ${
+              isCollapsed ? "pl-5" : "pl-4"
             }`}
           >
             <div
@@ -40,8 +40,8 @@ function App() {
                   : ""
               }`}
             >
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20 shrink-0">
-                <Library className="w-4 h-4 text-primary-foreground" />
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-tr from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20 shrink-0">
+                <Library className="w-6 h-6 text-primary-foreground" />
               </div>
               <span
                 className={`font-bold text-lg tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent truncate transition-all duration-300 origin-left overflow-hidden whitespace-nowrap ${
@@ -55,10 +55,10 @@ function App() {
             </div>
             <button
               onClick={() => setIsCollapsed(!isCollapsed)}
-              className={`rounded-lg hover:bg-secondary text-muted-foreground hover:text-foreground cursor-pointer shrink-0 transition-all duration-300 focus:outline-none ${
+              className={`absolute flex items-center justify-center rounded-lg hover:bg-secondary text-muted-foreground hover:text-foreground cursor-pointer transition-all duration-300 focus:outline-none ${
                 isCollapsed
-                  ? "absolute inset-0 m-auto w-8 h-8 flex items-center justify-center opacity-0 pointer-events-none group-hover/header:opacity-100 group-hover/header:pointer-events-auto scale-75 group-hover/header:scale-100"
-                  : "p-1.5 ml-1"
+                  ? "left-5 w-10 h-10 opacity-0 pointer-events-none group-hover/header:opacity-100 group-hover/header:pointer-events-auto scale-75 group-hover/header:scale-100"
+                  : "left-[208px] w-8 h-8 opacity-100 scale-100"
               }`}
               title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
             >
@@ -79,10 +79,10 @@ function App() {
                 <button
                   key={item.id}
                   onClick={() => setCurrentView(item.id)}
-                  className={`flex items-center transition-all duration-300 group relative focus:outline-none ${
+                  className={`flex items-center transition-all duration-300 group relative focus:outline-none overflow-hidden ${
                     isCollapsed
-                      ? "w-12 h-12 justify-center rounded-xl mx-auto"
-                      : "w-full pl-6 pr-4 py-3 rounded-l-none rounded-r-full justify-start"
+                      ? "w-12 h-12 rounded-xl mx-auto pl-[14px]"
+                      : "w-full pl-6 pr-4 py-3 rounded-l-none rounded-r-full"
                   } ${
                     isActive
                       ? "bg-[#00f59b] text-[#090d16] shadow-md shadow-[#00f59b]/25 font-semibold"

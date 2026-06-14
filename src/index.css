@@ -56,3 +56,39 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom Scrollbar Design */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track:vertical {
+  background: linear-gradient(
+    to right,
+    transparent 43%,
+    rgba(0, 245, 155, 0.2) 43%,
+    rgba(0, 245, 155, 0.2) 57%,
+    transparent 57%
+  );
+}
+
+::-webkit-scrollbar-track:horizontal {
+  background: linear-gradient(
+    to bottom,
+    transparent 43%,
+    rgba(0, 245, 155, 0.2) 43%,
+    rgba(0, 245, 155, 0.2) 57%,
+    transparent 57%
+  );
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #00f59b;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #00d485;
+}
+

@@ -6,4 +6,5 @@ contextBridge.exposeInMainWorld('api', {
   updateTrackMetadata: (payload) => ipcRenderer.invoke('update-track-metadata', payload),
   getWatcherConfig: () => ipcRenderer.invoke('get-watcher-config'),
   updateWatcherConfig: (newPath) => ipcRenderer.invoke('update-watcher-config', newPath),
+  getTrackCover: (filePath) => ipcRenderer.invoke('get-track-cover', filePath),
 });

@@ -4,6 +4,69 @@ import { Badge } from './ui/badge';
 import { TAXONOMY } from './TagForm';
 import { Filter, Music, AudioLines } from 'lucide-react';
 
+const TrackCard = ({ track }) => {
+  const [cover, setCover] = useState(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchCover = async () => {
+      if (window.api && window.api.getTrackCover) {
+        const coverData = await window.api.getTrackCover(track.file_path);
+        if (isMounted && coverData) {
+          setCover(coverData);
+        }
+      }
+    };
+    fetchCover();
+    return () => { isMounted = false; };
+  }, [track.file_path]);
+
+  return (
+    <Card className="hover:border-primary/50 transition-colors group cursor-pointer bg-card/50">
+      <CardContent className="p-5">
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 flex-shrink-0 bg-primary/10 rounded-lg text-primary overflow-hidden flex items-center justify-center">
+              {cover ? (
+                <img src={cover} alt="Cover" className="w-full h-full object-cover" />
+              ) : (
+                <Music className="w-5 h-5" />
+              )}
+            </div>
+            <h3 className="font-semibold truncate max-w-[150px]" title={track.file_name}>
+              {track.file_name}
+            </h3>
+          </div>
+          {track.has_stems && (
+            <Badge variant="secondary" className="flex items-center space-x-1 border-primary/20 bg-primary/5 text-primary">
+              <AudioLines className="w-3 h-3" />
+              <span>STEMS</span>
+            </Badge>
+          )}
+        </div>
+        
+        <div className="space-y-3">
+          {['genres', 'moods'].map(cat => (
+            track[cat].length > 0 && (
+              <div key={cat} className="flex flex-wrap gap-1">
+                {track[cat].map(tag => (
+                  <Badge key={tag} variant="outline" className="text-xs text-muted-foreground border-border/50">
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            )
+          ))}
+        </div>
+        
+        <div className="mt-4 pt-4 border-t border-border/50 text-xs text-muted-foreground flex justify-between">
+          <span className="truncate" title={track.file_path}>{track.file_path.split('\\').pop()?.split('/').pop()}</span>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
 export default function LibraryBrowser() {
   const [tracks, setTracks] = useState([]);
   const [filters, setFilters] = useState({
@@ -79,44 +142,7 @@ export default function LibraryBrowser() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {tracks.map(track => (
-            <Card key={track.id} className="hover:border-primary/50 transition-colors group cursor-pointer bg-card/50">
-              <CardContent className="p-5">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center space-x-3">
-                    <div className="p-2 bg-primary/10 rounded-lg text-primary">
-                      <Music className="w-5 h-5" />
-                    </div>
-                    <h3 className="font-semibold truncate max-w-[150px]" title={track.file_name}>
-                      {track.file_name}
-                    </h3>
-                  </div>
-                  {track.has_stems && (
-                    <Badge variant="secondary" className="flex items-center space-x-1 border-primary/20 bg-primary/5 text-primary">
-                      <AudioLines className="w-3 h-3" />
-                      <span>STEMS</span>
-                    </Badge>
-                  )}
-                </div>
-                
-                <div className="space-y-3">
-                  {['genres', 'moods'].map(cat => (
-                    track[cat].length > 0 && (
-                      <div key={cat} className="flex flex-wrap gap-1">
-                        {track[cat].map(tag => (
-                          <Badge key={tag} variant="outline" className="text-xs text-muted-foreground border-border/50">
-                            {tag}
-                          </Badge>
-                        ))}
-                      </div>
-                    )
-                  ))}
-                </div>
-                
-                <div className="mt-4 pt-4 border-t border-border/50 text-xs text-muted-foreground flex justify-between">
-                  <span className="truncate" title={track.file_path}>{track.file_path.split('\\').pop()?.split('/').pop()}</span>
-                </div>
-              </CardContent>
-            </Card>
+            <TrackCard key={track.id} track={track} />
           ))}
           {tracks.length === 0 && (
             <div className="col-span-full flex flex-col items-center justify-center p-12 text-muted-foreground border border-dashed rounded-xl border-border/50">

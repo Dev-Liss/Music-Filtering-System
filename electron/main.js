@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { initDB, getPendingTracks, getTaggedTracks, updateTrackMetadata } from './database.js';
 import { startWatcher, getWatcherConfig, updateWatcherConfig } from './watcher.js';
+import { parseFile } from 'music-metadata';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -43,6 +44,21 @@ app.whenReady().then(() => {
     updateWatcherConfig(newPath);
     startWatcher(); // Restart watcher with new path
     return true;
+  });
+  ipcMain.handle('get-track-cover', async (event, filePath) => {
+    try {
+      const metadata = await parseFile(filePath);
+      if (metadata.common.picture && metadata.common.picture.length > 0) {
+        const picture = metadata.common.picture[0];
+        // Convert picture.data (Uint8Array) to Buffer before calling toString('base64')
+        const base64Data = Buffer.from(picture.data).toString('base64');
+        return `data:${picture.format};base64,${base64Data}`;
+      }
+      return null;
+    } catch (error) {
+      console.error('Error reading track cover:', error);
+      return null;
+    }
   });
 
   // Start watching the configured folder (if set)

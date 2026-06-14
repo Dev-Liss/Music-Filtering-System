@@ -87,6 +87,19 @@ export default function LibraryBrowser() {
     fetchTracks();
   }, [filters]);
 
+  const clearAllFilters = () => {
+    setFilters({
+      genres: [],
+      moods: [],
+      video_themes: [],
+      instruments: []
+    });
+  };
+
+  const clearFilterCategory = (category) => {
+    setFilters(prev => ({ ...prev, [category]: [] }));
+  };
+
   const toggleFilter = (category, item) => {
     setFilters(prev => {
       const isSelected = prev[category].includes(item);
@@ -102,17 +115,37 @@ export default function LibraryBrowser() {
     <div className="flex h-full">
       {/* Sidebar Filters */}
       <div className="w-64 border-r border-border bg-card/30 p-6 overflow-y-auto">
-        <div className="flex items-center space-x-2 mb-6 text-foreground">
-          <Filter className="w-5 h-5" />
-          <h2 className="font-semibold text-lg">Filters</h2>
+        <div className="flex items-center justify-between mb-6 text-foreground">
+          <div className="flex items-center space-x-2">
+            <Filter className="w-5 h-5" />
+            <h2 className="font-semibold text-lg">Filters</h2>
+          </div>
+          {Object.values(filters).some(arr => arr.length > 0) && (
+            <button
+              onClick={clearAllFilters}
+              className="shrink-0 inline-flex items-center justify-center px-3 py-1 text-xs font-medium rounded-full border transition-all duration-200 select-none bg-[#ef4444]/15 text-[#ef4444] border-[#ef4444]/50 hover:bg-[#ef4444]/25"
+            >
+              Clear all
+            </button>
+          )}
         </div>
         
         <div className="space-y-8">
           {Object.entries(TAXONOMY).map(([category, items]) => (
             <div key={category}>
-              <h3 className="text-sm font-semibold mb-3 uppercase tracking-wider text-muted-foreground">
-                {category.replace('_', ' ')}
-              </h3>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                  {category.replace('_', ' ')}
+                </h3>
+                {filters[category].length > 0 && (
+                  <button
+                    onClick={() => clearFilterCategory(category)}
+                    className="shrink-0 inline-flex items-center justify-center px-3 py-1 text-xs font-medium rounded-full border transition-all duration-200 select-none bg-[#ef4444]/15 text-[#ef4444] border-[#ef4444]/50 hover:bg-[#ef4444]/25"
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
               <div className="space-y-2">
                 {items.map(item => {
                   const isSelected = filters[category].includes(item);

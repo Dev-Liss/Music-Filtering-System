@@ -39,17 +39,19 @@ export default function TagForm({ track, onSave }) {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold truncate" title={track.file_name}>{track.file_name}</h3>
-        <label className="flex items-center space-x-2 text-sm cursor-pointer">
-          <input 
-            type="checkbox" 
-            checked={hasStems} 
-            onChange={(e) => setHasStems(e.target.checked)}
-            className="rounded border-input text-primary focus:ring-primary"
-          />
-          <span>STEMs Available</span>
-        </label>
+      <div className="flex items-center justify-between mb-2">
+        <h3 className="text-lg font-semibold truncate pr-4" title={track.file_name}>{track.file_name}</h3>
+        <button
+          type="button"
+          onClick={() => setHasStems(!hasStems)}
+          className={`shrink-0 inline-flex items-center justify-center px-3 py-1 text-xs font-medium rounded-full border transition-all duration-200 select-none ${
+            hasStems
+              ? "bg-[#00f59b]/15 text-[#00f59b] border-[#00f59b]/50"
+              : "bg-secondary/50 text-muted-foreground border-border hover:bg-secondary hover:text-foreground"
+          }`}
+        >
+          STEMs Available
+        </button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">

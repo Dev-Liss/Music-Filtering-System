@@ -146,7 +146,7 @@ export default function TagForm({ track, onSave }) {
 
       <div className="pt-4 border-t border-border">
         <Button onClick={handleSave} className="w-full">
-          Save Metadata & Mark Tagged
+          Save Metadata
         </Button>
       </div>
     </div>

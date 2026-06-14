@@ -84,7 +84,7 @@ export default function MultiSelect({
 
       {isOpen && (
         <div className="absolute top-full left-0 right-0 mt-1.5 z-50 rounded-lg border border-border/50 bg-[#0c1220] backdrop-blur-md shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-1 duration-150">
-          <div className="max-h-56 overflow-y-auto py-1.5 scrollbar-thin">
+          <div className="max-h-56 overflow-y-auto py-1.5">
             {options.map((option) => {
               const isSelected = selected.includes(option);
               return (

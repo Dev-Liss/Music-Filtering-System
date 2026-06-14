@@ -8,6 +8,7 @@ import {
   LayoutList,
   PanelLeftClose,
   PanelLeftOpen,
+  Component,
 } from "lucide-react";
 
 function App() {
@@ -15,7 +16,7 @@ function App() {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const navItems = [
-    { id: "browser", label: "Library Browser", icon: Library },
+    { id: "browser", label: "Library Browser", icon: Component },
     { id: "wizard", label: "Metadata Queue", icon: LayoutList },
     { id: "settings", label: "Settings", icon: SettingsIcon },
   ];

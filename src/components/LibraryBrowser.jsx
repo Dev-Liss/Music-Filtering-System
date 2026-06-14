@@ -54,7 +54,7 @@ export default function LibraryBrowser() {
                 {items.map(item => {
                   const isSelected = filters[category].includes(item);
                   return (
-                    <label key={item} className="flex items-center space-x-3 cursor-pointer group">
+                    <label key={item} className="flex items-center space-x-3 cursor-pointer group" onClick={() => toggleFilter(category, item)}>
                       <div className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${isSelected ? 'bg-primary border-primary' : 'border-input group-hover:border-primary/50'}`}>
                         {isSelected && <div className="w-2 h-2 bg-primary-foreground rounded-sm" />}
                       </div>

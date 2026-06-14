@@ -43,8 +43,12 @@ export default function MetadataWizard({ onTagged }) {
       </div>
 
       <div className="space-y-6">
-        {pendingTracks.map(track => (
-          <Card key={track.id} className="shadow-lg border-border/50 bg-card/50 backdrop-blur-sm">
+        {pendingTracks.map((track, index) => (
+          <Card 
+            key={track.id} 
+            className="shadow-lg border-border/50 bg-card/50 backdrop-blur-sm relative"
+            style={{ zIndex: pendingTracks.length - index }}
+          >
             <CardContent className="pt-6">
               <TagForm track={track} onSave={handleSave} />
             </CardContent>

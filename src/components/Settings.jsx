@@ -31,17 +31,18 @@ export default function Settings() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium">NAS Watch Directory Path</label>
+            <label className="text-sm font-medium">NAS Watch Directory Path (Fixed)</label>
             <Input 
               value={nasPath} 
-              onChange={e => setNasPath(e.target.value)} 
-              placeholder="e.g. \\NAS\Music or Z:\Music"
+              disabled
+              className="bg-secondary/40 cursor-not-allowed opacity-80 border-border/50 text-muted-foreground"
+              placeholder="D:\TestLocation"
             />
-            <p className="text-xs text-muted-foreground">
-              The system will monitor this directory for new .mp3 and .wav files.
+            <p className="text-xs text-[#00f59b] font-medium">
+              The system is currently fixed to monitor: D:\TestLocation
             </p>
           </div>
-          <Button onClick={handleSave}>Save Configuration</Button>
+          <Button disabled className="opacity-50 cursor-not-allowed">Save Configuration</Button>
           {saved && <span className="ml-4 text-sm text-green-500">Saved successfully! Watcher restarted.</span>}
         </CardContent>
       </Card>

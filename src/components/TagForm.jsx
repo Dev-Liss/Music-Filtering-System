@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Badge } from './ui/badge';
 import { Button } from './ui/button';
+import MultiSelect from './ui/MultiSelect';
 
 export const TAXONOMY = {
   genres: ["Cinematic", "Electronic", "Hip Hop", "Pop", "Rock", "Indie", "Acoustic", "Ambient", "Corporate"],
@@ -52,26 +52,16 @@ export default function TagForm({ track, onSave }) {
         </label>
       </div>
 
-      <div className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
         {Object.entries(TAXONOMY).map(([category, items]) => (
-          <div key={category}>
-            <h4 className="text-sm font-medium mb-2 capitalize">{category.replace('_', ' ')}</h4>
-            <div className="flex flex-wrap gap-2">
-              {items.map(item => {
-                const isSelected = selections[category].includes(item);
-                return (
-                  <Badge 
-                    key={item} 
-                    variant={isSelected ? "default" : "secondary"}
-                    className="cursor-pointer transition-colors"
-                    onClick={() => toggleSelection(category, item)}
-                  >
-                    {item}
-                  </Badge>
-                );
-              })}
-            </div>
-          </div>
+          <MultiSelect
+            key={category}
+            label={category.replace('_', ' ')}
+            options={items}
+            selected={selections[category]}
+            onChange={(item) => toggleSelection(category, item)}
+            placeholder={`Select ${category.replace('_', ' ')}...`}
+          />
         ))}
       </div>
 

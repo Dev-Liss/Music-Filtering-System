@@ -5,7 +5,7 @@ import { getSetting, setSetting, addTrackIfNew } from './database.js';
 let watcher = null;
 
 export function getWatcherConfig() {
-  return getSetting('nas_path') || '';
+  return 'D:\\TestLocation';
 }
 
 export function updateWatcherConfig(newPath) {

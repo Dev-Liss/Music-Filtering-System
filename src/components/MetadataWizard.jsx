@@ -36,11 +36,12 @@ export default function MetadataWizard({ onTagged }) {
   }
 
   return (
-    <div className="p-8 max-w-4xl mx-auto">
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold tracking-tight">Metadata Wizard</h2>
-        <p className="text-muted-foreground">You have {pendingTracks.length} pending track(s) to tag.</p>
-      </div>
+    <div className="h-full w-full overflow-y-auto">
+      <div className="p-8 max-w-4xl mx-auto">
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold tracking-tight">Metadata Wizard</h2>
+          <p className="text-muted-foreground">You have {pendingTracks.length} pending track(s) to tag.</p>
+        </div>
 
       <div className="space-y-6">
         {pendingTracks.map((track, index) => (
@@ -55,6 +56,7 @@ export default function MetadataWizard({ onTagged }) {
           </Card>
         ))}
       </div>
+    </div>
     </div>
   );
 }

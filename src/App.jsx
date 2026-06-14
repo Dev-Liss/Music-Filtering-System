@@ -28,23 +28,37 @@ function App() {
       >
         <div>
           <div
-            className={`h-16 flex items-center border-b border-border transition-all duration-300 ${
-              isCollapsed ? "justify-between px-3" : "justify-between px-4"
+            className={`h-16 flex items-center border-b border-border transition-all duration-300 relative group/header ${
+              isCollapsed ? "justify-center" : "justify-between px-4"
             }`}
           >
-            <div className="flex items-center min-w-0">
+            <div
+              className={`flex items-center min-w-0 transition-all duration-300 ${
+                isCollapsed
+                  ? "group-hover/header:opacity-0 group-hover/header:scale-75 group-hover/header:pointer-events-none"
+                  : ""
+              }`}
+            >
               <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20 shrink-0">
                 <Library className="w-4 h-4 text-primary-foreground" />
               </div>
-              {!isCollapsed && (
-                <span className="ml-3 font-bold text-lg tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent truncate animate-in fade-in duration-300">
-                  SoundVault
-                </span>
-              )}
+              <span
+                className={`font-bold text-lg tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent truncate transition-all duration-300 origin-left overflow-hidden whitespace-nowrap ${
+                  isCollapsed
+                    ? "opacity-0 max-w-0 ml-0 pointer-events-none scale-95"
+                    : "opacity-100 max-w-32 ml-3 scale-100"
+                }`}
+              >
+                SoundVault
+              </span>
             </div>
             <button
               onClick={() => setIsCollapsed(!isCollapsed)}
-              className="p-1.5 rounded-lg hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors cursor-pointer shrink-0 ml-1"
+              className={`rounded-lg hover:bg-secondary text-muted-foreground hover:text-foreground cursor-pointer shrink-0 transition-all duration-300 focus:outline-none ${
+                isCollapsed
+                  ? "absolute inset-0 m-auto w-8 h-8 flex items-center justify-center opacity-0 pointer-events-none group-hover/header:opacity-100 group-hover/header:pointer-events-auto scale-75 group-hover/header:scale-100"
+                  : "p-1.5 ml-1"
+              }`}
               title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
             >
               {isCollapsed ? (
@@ -64,28 +78,28 @@ function App() {
                 <button
                   key={item.id}
                   onClick={() => setCurrentView(item.id)}
-                  className={
+                  className={`flex items-center transition-all duration-300 group relative focus:outline-none ${
                     isCollapsed
-                      ? `w-12 h-12 flex items-center justify-center rounded-xl transition-all duration-200 group relative mx-auto focus:outline-none ${
-                          isActive
-                            ? "bg-[#00f59b] text-[#090d16] shadow-md shadow-[#00f59b]/25 font-semibold"
-                            : "text-muted-foreground hover:bg-secondary hover:text-foreground focus-visible:bg-[#00f59b] focus-visible:text-[#090d16]"
-                        }`
-                      : `w-full flex items-center pl-6 pr-4 py-3 rounded-l-none rounded-r-full transition-all duration-200 group relative focus:outline-none ${
-                          isActive
-                            ? "bg-[#00f59b] text-[#090d16] shadow-md shadow-[#00f59b]/25 font-semibold"
-                            : "text-muted-foreground hover:bg-secondary hover:text-foreground focus-visible:bg-[#00f59b] focus-visible:text-[#090d16]"
-                        }`
-                  }
+                      ? "w-12 h-12 justify-center rounded-xl mx-auto"
+                      : "w-full pl-6 pr-4 py-3 rounded-l-none rounded-r-full justify-start"
+                  } ${
+                    isActive
+                      ? "bg-[#00f59b] text-[#090d16] shadow-md shadow-[#00f59b]/25 font-semibold"
+                      : "text-muted-foreground hover:bg-secondary hover:text-foreground focus-visible:bg-[#00f59b] focus-visible:text-[#090d16]"
+                  }`}
                 >
                   <Icon
                     className={`w-5 h-5 shrink-0 transition-transform ${isActive ? "text-[#090d16]" : "group-hover:scale-110 group-focus-visible:text-[#090d16]"}`}
                   />
-                  {!isCollapsed && (
-                    <span className="ml-3 font-medium truncate animate-in fade-in duration-200">
-                      {item.label}
-                    </span>
-                  )}
+                  <span
+                    className={`font-medium truncate transition-all duration-300 origin-left overflow-hidden whitespace-nowrap ${
+                      isCollapsed
+                        ? "opacity-0 max-w-0 ml-0 pointer-events-none scale-95"
+                        : "opacity-100 max-w-48 ml-3 scale-100"
+                    }`}
+                  >
+                    {item.label}
+                  </span>
                   {isCollapsed && (
                     <div className="absolute left-full ml-3 px-3 py-1.5 bg-popover text-popover-foreground text-xs font-medium rounded-lg shadow-lg border border-border whitespace-nowrap opacity-0 scale-95 origin-left pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:translate-x-1 transition-all duration-150 z-50">
                       {item.label}

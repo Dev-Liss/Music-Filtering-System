@@ -92,7 +92,7 @@ function App() {
                     className={`w-5 h-5 shrink-0 transition-transform ${isActive ? "text-[#090d16]" : "group-hover:scale-110 group-focus-visible:text-[#090d16]"}`}
                   />
                   <span
-                    className={`font-medium truncate transition-all duration-300 origin-left overflow-hidden whitespace-nowrap ${
+                    className={`font-medium truncate transition-[max-width,opacity,margin,transform] duration-300 origin-left overflow-hidden whitespace-nowrap ${
                       isCollapsed
                         ? "opacity-0 max-w-0 ml-0 pointer-events-none scale-95"
                         : "opacity-100 max-w-48 ml-3 scale-100"

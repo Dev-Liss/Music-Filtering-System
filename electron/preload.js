@@ -12,4 +12,5 @@ contextBridge.exposeInMainWorld('api', {
   getAudioBuffer: (filePath) => ipcRenderer.invoke('get-audio-buffer', filePath),
   getTrackStems: (trackPath) => ipcRenderer.invoke('get-track-stems', trackPath),
   saveToDownloads: (filePath) => ipcRenderer.invoke('save-to-downloads', filePath),
+  selectStems: () => ipcRenderer.invoke('select-stems'),
 });

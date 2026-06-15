@@ -27,9 +27,19 @@ export default function SongDetailsModal({ track, onClose, onDelete }) {
           if (isMounted && coverData) setCover(coverData);
         }
         
-        if (window.api.getTrackStems && track.has_stems) {
-          const stemFiles = await window.api.getTrackStems(track.file_path);
-          if (isMounted) setStems(stemFiles);
+        if (track.has_stems) {
+          if (track.stems_paths && track.stems_paths.length > 0) {
+            const stemFiles = track.stems_paths.map(p => {
+              // Extract the filename from the path
+              const name = p.replace(/^.*[\\/]/, '');
+              return { name, path: p };
+            });
+            if (isMounted) setStems(stemFiles);
+          } else if (window.api.getTrackStems) {
+            // Fallback for older tracks that didn't save stem paths
+            const stemFiles = await window.api.getTrackStems(track.file_path);
+            if (isMounted) setStems(stemFiles);
+          }
         }
       }
     };

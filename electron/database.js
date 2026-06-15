@@ -19,6 +19,7 @@ export function initDB() {
       video_themes TEXT DEFAULT '[]',
       instruments TEXT DEFAULT '[]',
       has_stems INTEGER DEFAULT 0,
+      stems_paths TEXT DEFAULT '[]',
       status TEXT DEFAULT 'pending',
       date_added DATETIME DEFAULT CURRENT_TIMESTAMP
     );
@@ -28,6 +29,11 @@ export function initDB() {
       value TEXT
     );
   `);
+
+  const tableInfo = db.prepare('PRAGMA table_info(tracks)').all();
+  if (!tableInfo.some(col => col.name === 'stems_paths')) {
+    db.exec("ALTER TABLE tracks ADD COLUMN stems_paths TEXT DEFAULT '[]'");
+  }
 }
 
 export function getPendingTracks() {
@@ -75,12 +81,13 @@ export function getTaggedTracks(filters) {
     moods: JSON.parse(track.moods),
     video_themes: JSON.parse(track.video_themes),
     instruments: JSON.parse(track.instruments),
-    has_stems: track.has_stems === 1
+    has_stems: track.has_stems === 1,
+    stems_paths: track.stems_paths ? JSON.parse(track.stems_paths) : []
   }));
 }
 
 export function updateTrackMetadata(payload) {
-  const { id, genres, moods, video_themes, instruments, has_stems } = payload;
+  const { id, genres, moods, video_themes, instruments, has_stems, stems_paths } = payload;
   const stmt = db.prepare(`
     UPDATE tracks 
     SET 
@@ -89,6 +96,7 @@ export function updateTrackMetadata(payload) {
       video_themes = @video_themes,
       instruments = @instruments,
       has_stems = @has_stems,
+      stems_paths = @stems_paths,
       status = 'tagged'
     WHERE id = @id
   `);
@@ -99,7 +107,8 @@ export function updateTrackMetadata(payload) {
     moods: JSON.stringify(moods),
     video_themes: JSON.stringify(video_themes),
     instruments: JSON.stringify(instruments),
-    has_stems: has_stems ? 1 : 0
+    has_stems: has_stems ? 1 : 0,
+    stems_paths: JSON.stringify(stems_paths || [])
   });
 }
 

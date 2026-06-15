@@ -56,6 +56,7 @@ export default function TagForm({ track, onSave, onIgnore }) {
     instruments: [],
   });
   const [hasStems, setHasStems] = useState(false);
+  const [stemFiles, setStemFiles] = useState([]);
   const [cover, setCover] = useState(null);
 
   useEffect(() => {
@@ -93,6 +94,7 @@ export default function TagForm({ track, onSave, onIgnore }) {
       id: track.id,
       ...selections,
       has_stems: hasStems,
+      stems_paths: stemFiles,
     });
   };
 
@@ -119,25 +121,27 @@ export default function TagForm({ track, onSave, onIgnore }) {
           </h3>
         </div>
         <div className="flex items-center space-x-3 shrink-0">
-          <span className={`text-sm font-medium transition-colors ${hasStems ? "text-foreground" : "text-muted-foreground"}`}>
-            Stems Available
-          </span>
-          <button
+          <Button
             type="button"
-            role="switch"
-            aria-checked={hasStems}
-            onClick={() => setHasStems(!hasStems)}
-            className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#00f59b] focus:ring-offset-2 focus:ring-offset-background ${
-              hasStems ? "bg-[#00f59b]" : "bg-secondary"
-            }`}
+            variant="outline"
+            onClick={async () => {
+              if (window.api && window.api.selectStems) {
+                const files = await window.api.selectStems();
+                if (files && files.length > 0) {
+                  setHasStems(true);
+                  setStemFiles(files);
+                } else {
+                  setHasStems(false);
+                  setStemFiles([]);
+                }
+              } else {
+                setHasStems(!hasStems);
+              }
+            }}
+            className={`border-[#00f59b]/50 hover:bg-[#00f59b]/15 hover:text-[#00f59b] ${hasStems ? 'bg-[#00f59b]/15 text-[#00f59b]' : 'text-[#00f59b]'}`}
           >
-            <span
-              aria-hidden="true"
-              className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
-                hasStems ? "translate-x-5" : "translate-x-0"
-              }`}
-            />
-          </button>
+            {hasStems ? "Stems Selected" : "Stems Available"}
+          </Button>
         </div>
       </div>
 

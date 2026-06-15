@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, dialog } from 'electron';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { initDB, getPendingTracks, getTaggedTracks, updateTrackMetadata, ignoreTrack, deleteTrack } from './database.js';
@@ -108,6 +108,18 @@ app.whenReady().then(() => {
       console.error('Error saving to downloads:', error);
       return { success: false, error: error.message };
     }
+  });
+
+  ipcMain.handle('select-stems', async () => {
+    const result = await dialog.showOpenDialog(mainWindow, {
+      title: 'Select Stem Files',
+      properties: ['openFile', 'multiSelections'],
+      filters: [
+        { name: 'Audio Files', extensions: ['mp3', 'wav', 'flac', 'aac', 'ogg'] },
+        { name: 'All Files', extensions: ['*'] }
+      ]
+    });
+    return result.filePaths;
   });
 
   // Start watching the configured folder (if set)

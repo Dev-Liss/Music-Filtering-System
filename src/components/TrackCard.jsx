@@ -6,7 +6,7 @@ import { usePlayer } from "../contexts/PlayerContext";
 import { useFavorites } from "../contexts/FavoritesContext";
 import { usePlaylists } from "../contexts/PlaylistContext";
 
-const TrackCard = ({ track, viewMode, currentPlaylist }) => {
+const TrackCard = ({ track, viewMode, currentPlaylist, onClick }) => {
   const [cover, setCover] = useState(null);
   const [showPlaylists, setShowPlaylists] = useState(false);
   const { currentTrack, isPlaying, playTrack, togglePlay } = usePlayer();
@@ -69,7 +69,7 @@ const TrackCard = ({ track, viewMode, currentPlaylist }) => {
 
   if (viewMode === "list") {
     return (
-      <Card className="hover:border-primary/50 transition-all duration-300 group cursor-pointer bg-card/50 hover:bg-card/80 relative overflow-visible">
+      <Card onClick={() => onClick && onClick(track)} className="hover:border-primary/50 transition-all duration-300 group cursor-pointer bg-card/50 hover:bg-card/80 relative overflow-visible">
         <CardContent className="p-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
           <div className="flex items-center gap-4 flex-1 min-w-0 w-full">
             <div className="w-12 h-12 flex-shrink-0 bg-primary/10 rounded-lg text-primary overflow-hidden flex items-center justify-center shadow-inner relative">
@@ -175,7 +175,7 @@ const TrackCard = ({ track, viewMode, currentPlaylist }) => {
   }
 
   return (
-    <Card className="hover:border-primary/50 transition-colors group cursor-pointer bg-card/50 relative overflow-hidden">
+    <Card onClick={() => onClick && onClick(track)} className="hover:border-primary/50 transition-colors group cursor-pointer bg-card/50 relative overflow-hidden">
       <CardContent className="p-5 flex flex-col h-full">
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center space-x-3">

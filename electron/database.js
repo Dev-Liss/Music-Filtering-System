@@ -114,6 +114,11 @@ export function setSetting(key, value) {
   stmt.run(key, value);
 }
 
+export function ignoreTrack(id) {
+  const stmt = db.prepare("UPDATE tracks SET status = 'ignored' WHERE id = ?");
+  stmt.run(id);
+}
+
 export function addTrackIfNew(fileName, filePath) {
   const checkStmt = db.prepare('SELECT id FROM tracks WHERE file_name = ?');
   const existing = checkStmt.get(fileName);

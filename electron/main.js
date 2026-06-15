@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { initDB, getPendingTracks, getTaggedTracks, updateTrackMetadata } from './database.js';
+import { initDB, getPendingTracks, getTaggedTracks, updateTrackMetadata, ignoreTrack } from './database.js';
 import { startWatcher, getWatcherConfig, updateWatcherConfig } from './watcher.js';
 import { parseFile } from 'music-metadata';
 import fs from 'fs';
@@ -41,6 +41,7 @@ app.whenReady().then(() => {
   ipcMain.handle('get-pending-tracks', () => getPendingTracks());
   ipcMain.handle('get-tagged-tracks', (event, filters) => getTaggedTracks(filters));
   ipcMain.handle('update-track-metadata', (event, payload) => updateTrackMetadata(payload));
+  ipcMain.handle('ignore-track', (event, id) => ignoreTrack(id));
   ipcMain.handle('get-watcher-config', () => getWatcherConfig());
   ipcMain.handle('update-watcher-config', (event, newPath) => {
     updateWatcherConfig(newPath);
@@ -70,6 +71,41 @@ app.whenReady().then(() => {
     } catch (error) {
       console.error('Error reading audio buffer:', error);
       return null;
+    }
+  });
+
+  ipcMain.handle('get-track-stems', async (event, trackPath) => {
+    try {
+      // Assuming stems are stored in a folder with the track name + " Stems" or something similar
+      // For now, look for a folder with the same name as the file (without extension)
+      const parsedPath = path.parse(trackPath);
+      const stemsFolder = path.join(parsedPath.dir, parsedPath.name + " Stems");
+      
+      if (fs.existsSync(stemsFolder)) {
+        const files = await fs.promises.readdir(stemsFolder);
+        return files.map(file => ({
+          name: file,
+          path: path.join(stemsFolder, file)
+        }));
+      }
+      return [];
+    } catch (error) {
+      console.error('Error getting stems:', error);
+      return [];
+    }
+  });
+
+  ipcMain.handle('save-to-downloads', async (event, filePath) => {
+    try {
+      const downloadsPath = app.getPath('downloads');
+      const fileName = path.basename(filePath);
+      const destPath = path.join(downloadsPath, fileName);
+      
+      await fs.promises.copyFile(filePath, destPath);
+      return { success: true, destPath };
+    } catch (error) {
+      console.error('Error saving to downloads:', error);
+      return { success: false, error: error.message };
     }
   });
 

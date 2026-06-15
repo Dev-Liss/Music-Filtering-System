@@ -48,7 +48,7 @@ export const TAXONOMY = {
   ],
 };
 
-export default function TagForm({ track, onSave }) {
+export default function TagForm({ track, onSave, onIgnore }) {
   const [selections, setSelections] = useState({
     genres: [],
     moods: [],
@@ -154,8 +154,13 @@ export default function TagForm({ track, onSave }) {
         ))}
       </div>
 
-      <div className="pt-4 border-t border-border">
-        <Button onClick={handleSave} className="w-full">
+      <div className="pt-4 border-t border-border flex space-x-4">
+        {onIgnore && (
+          <Button variant="outline" onClick={() => onIgnore(track.id)} className="w-1/3 border-[#ef4444]/50 text-[#ef4444] hover:bg-[#ef4444]/15 hover:text-[#ef4444]">
+            Ignore
+          </Button>
+        )}
+        <Button onClick={handleSave} className={onIgnore ? "w-2/3" : "w-full"}>
           Save Metadata
         </Button>
       </div>

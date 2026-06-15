@@ -25,6 +25,13 @@ export default function MetadataWizard({ onTagged }) {
     }
   };
 
+  const handleIgnore = async (id) => {
+    if (window.api && window.api.ignoreTrack) {
+      await window.api.ignoreTrack(id);
+      fetchPending();
+    }
+  };
+
   if (pendingTracks.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-muted-foreground p-8">
@@ -53,7 +60,7 @@ export default function MetadataWizard({ onTagged }) {
               style={{ zIndex: pendingTracks.length - index }}
             >
               <CardContent className="pt-6">
-                <TagForm track={track} onSave={handleSave} />
+                <TagForm track={track} onSave={handleSave} onIgnore={handleIgnore} />
               </CardContent>
             </Card>
           ))}

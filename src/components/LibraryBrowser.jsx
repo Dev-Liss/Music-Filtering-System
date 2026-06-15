@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Filter, Search, LayoutGrid, List } from "lucide-react";
 import { TAXONOMY } from "./TagForm";
 import TrackCard from "./TrackCard";
+import SongDetailsModal from "./SongDetailsModal";
 
 export default function LibraryBrowser() {
   const [tracks, setTracks] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState("grid");
+  const [selectedTrack, setSelectedTrack] = useState(null);
   const [filters, setFilters] = useState({
     genres: [],
     moods: [],
@@ -167,7 +169,7 @@ export default function LibraryBrowser() {
 
         <div className={`grid gap-6 transition-all duration-500 ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}>
           {filteredTracks.map((track) => (
-            <TrackCard key={track.id} track={track} viewMode={viewMode} currentPlaylist={filteredTracks} />
+            <TrackCard key={track.id} track={track} viewMode={viewMode} currentPlaylist={filteredTracks} onClick={setSelectedTrack} />
           ))}
           {filteredTracks.length === 0 && (
             <div className="col-span-full flex flex-col items-center justify-center p-12 text-muted-foreground border border-dashed rounded-xl border-border/50">
@@ -177,6 +179,13 @@ export default function LibraryBrowser() {
           )}
         </div>
       </div>
+      
+      {selectedTrack && (
+        <SongDetailsModal 
+          track={selectedTrack} 
+          onClose={() => setSelectedTrack(null)} 
+        />
+      )}
     </div>
   );
 }

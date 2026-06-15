@@ -138,7 +138,7 @@ export default function TagForm({ track, onSave, onIgnore }) {
                 setHasStems(!hasStems);
               }
             }}
-            className={`border-[#00f59b]/50 hover:bg-[#00f59b]/15 hover:text-[#00f59b] ${hasStems ? 'bg-[#00f59b]/15 text-[#00f59b]' : 'text-[#00f59b]'}`}
+            className={`rounded-full transition-colors ${hasStems ? 'border-[#00f59b]/50 bg-[#00f59b]/15 text-[#00f59b] hover:bg-[#00f59b]/25 hover:text-[#00f59b]' : ''}`}
           >
             {hasStems ? "Stems Selected" : "Stems Available"}
           </Button>

@@ -150,13 +150,13 @@ export default function SongDetailsModal({ track, onClose, onDelete }) {
               
               <div className="space-y-3">
                 {/* Main Track Download */}
-                <div className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10 hover:border-primary/30 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                <div className="flex items-center justify-between gap-4 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-primary/30 transition-colors">
+                  <div className="flex items-center gap-3 flex-1 min-w-0">
+                    <div className="w-10 h-10 shrink-0 rounded-lg bg-primary/10 flex items-center justify-center">
                       <Music className="w-5 h-5 text-primary" />
                     </div>
-                    <div>
-                      <p className="text-sm font-medium text-foreground">Main Track</p>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-foreground break-words">Main Track</p>
                       <p className="text-xs text-muted-foreground">Original File</p>
                     </div>
                   </div>
@@ -175,13 +175,13 @@ export default function SongDetailsModal({ track, onClose, onDelete }) {
 
                 {/* Stems */}
                 {track.has_stems && stems.map((stem, idx) => (
-                  <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10 hover:border-primary/30 transition-colors">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center">
+                  <div key={idx} className="flex items-center justify-between gap-4 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-primary/30 transition-colors">
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      <div className="w-10 h-10 shrink-0 rounded-lg bg-secondary flex items-center justify-center">
                         <AudioLines className="w-5 h-5 text-muted-foreground" />
                       </div>
-                      <div className="flex-1 min-w-0 pr-4">
-                         <p className="text-sm font-medium text-foreground truncate" title={stem.name}>
+                      <div className="flex-1 min-w-0">
+                         <p className="text-sm font-medium text-foreground break-words" title={stem.name}>
                            {stem.name}
                          </p>
                          <p className="text-xs text-muted-foreground">Stem</p>
@@ -190,10 +190,10 @@ export default function SongDetailsModal({ track, onClose, onDelete }) {
                     <button
                       onClick={() => handleDownload(stem.path, `stem-${idx}`)}
                       disabled={isSaving === `stem-${idx}`}
-                      className={`flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all disabled:opacity-50 ${
+                      className={`flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-sm disabled:opacity-50 ${
                         savedItems[`stem-${idx}`]
                           ? 'bg-green-500/20 text-green-500 hover:bg-green-500/30'
-                          : 'bg-secondary hover:bg-secondary/80 text-secondary-foreground'
+                          : 'bg-primary hover:bg-primary/90 text-primary-foreground shadow-primary/20'
                       }`}
                     >
                       {isSaving === `stem-${idx}` ? 'Saving...' : savedItems[`stem-${idx}`] ? 'Saved' : 'Save'}

@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Play, Pause, SkipBack, SkipForward, Maximize2, Heart, Music } from 'lucide-react';
 import { usePlayer } from '../contexts/PlayerContext';
+import { useFavorites } from '../contexts/FavoritesContext';
 
 const MusicPlayer = () => {
   const { currentTrack, isPlaying, togglePlay, playNext, playPrevious, currentTime, duration, seek, waveform } = usePlayer();
+  const { isFavorite, toggleFavorite } = useFavorites();
   const [cover, setCover] = useState(null);
 
   useEffect(() => {
@@ -57,8 +59,11 @@ const MusicPlayer = () => {
             {currentTrack ? "Local File" : ""}
           </p>
         </div>
-        <button className="text-muted-foreground hover:text-red-400 transition-colors ml-2">
-          <Heart className="w-4 h-4" />
+        <button 
+          onClick={() => currentTrack && toggleFavorite(currentTrack)}
+          className={`transition-colors ml-2 ${currentTrack && isFavorite(currentTrack.id) ? 'text-red-400' : 'text-muted-foreground hover:text-red-400'}`}
+        >
+          <Heart className={`w-4 h-4 ${currentTrack && isFavorite(currentTrack.id) ? 'fill-current' : ''}`} />
         </button>
       </div>
 

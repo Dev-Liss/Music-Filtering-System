@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Play, Pause, SkipBack, SkipForward, Maximize2, Heart, Music } from 'lucide-react';
+import { Play, Pause, SkipBack, SkipForward, Maximize2, Heart, Music, Volume2, VolumeX, Volume1 } from 'lucide-react';
 import { usePlayer } from '../contexts/PlayerContext';
 import { useFavorites } from '../contexts/FavoritesContext';
 
 const MusicPlayer = () => {
-  const { currentTrack, isPlaying, togglePlay, playNext, playPrevious, currentTime, duration, seek, waveform } = usePlayer();
+  const { currentTrack, isPlaying, togglePlay, playNext, playPrevious, currentTime, duration, seek, waveform, volume, setVolume, isMuted, toggleMute } = usePlayer();
   const { isFavorite, toggleFavorite } = useFavorites();
   const [cover, setCover] = useState(null);
 
@@ -130,8 +130,26 @@ const MusicPlayer = () => {
         </div>
       </div>
 
-      {/* Right: Empty space to keep middle section centered */}
+      {/* Right: Volume Controls */}
       <div className="flex items-center justify-end gap-4 w-1/4 min-w-[200px]">
+        <div className="flex items-center gap-2 w-32 group">
+          <button onClick={toggleMute} className="text-muted-foreground hover:text-white transition-colors">
+            {isMuted || volume === 0 ? <VolumeX className="w-5 h-5" /> : volume < 0.5 ? <Volume1 className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+          </button>
+          <div 
+            className="flex-1 h-1.5 bg-white/10 rounded-full cursor-pointer relative overflow-hidden"
+            onClick={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              const x = e.clientX - rect.left;
+              setVolume(Math.max(0, Math.min(1, x / rect.width)));
+            }}
+          >
+            <div 
+              className="absolute top-0 left-0 h-full bg-white group-hover:bg-primary transition-colors"
+              style={{ width: `${isMuted ? 0 : volume * 100}%` }}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

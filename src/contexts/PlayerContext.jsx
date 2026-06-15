@@ -11,6 +11,8 @@ export const PlayerProvider = ({ children }) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [waveform, setWaveform] = useState(Array.from({ length: 80 }).map(() => 20));
+  const [volume, setVolume] = useState(1);
+  const [isMuted, setIsMuted] = useState(false);
   
   const audioRef = useRef(new Audio());
   
@@ -103,6 +105,14 @@ export const PlayerProvider = ({ children }) => {
     }
   }, [isPlaying]);
 
+  useEffect(() => {
+    audioRef.current.volume = volume;
+  }, [volume]);
+
+  useEffect(() => {
+    audioRef.current.muted = isMuted;
+  }, [isMuted]);
+
   const playTrack = (track, newPlaylist = null) => {
     const listToUse = newPlaylist || playlist;
     // Sort the list by id
@@ -124,6 +134,17 @@ export const PlayerProvider = ({ children }) => {
     if (currentTrack) {
       setIsPlaying(!isPlaying);
     }
+  };
+
+  const handleSetVolume = (newVolume) => {
+    setVolume(newVolume);
+    if (newVolume > 0 && isMuted) {
+      setIsMuted(false);
+    }
+  };
+
+  const toggleMute = () => {
+    setIsMuted(!isMuted);
   };
 
   const playNext = () => {
@@ -155,7 +176,11 @@ export const PlayerProvider = ({ children }) => {
       playNext,
       playPrevious,
       seek,
-      waveform
+      waveform,
+      volume,
+      setVolume: handleSetVolume,
+      isMuted,
+      toggleMute
     }}>
       {children}
     </PlayerContext.Provider>

@@ -118,17 +118,27 @@ export default function TagForm({ track, onSave }) {
             {track.file_name}
           </h3>
         </div>
-        <button
-          type="button"
-          onClick={() => setHasStems(!hasStems)}
-          className={`shrink-0 inline-flex items-center justify-center px-3 py-1 text-xs font-medium rounded-full border transition-all duration-200 select-none ${
-            hasStems
-              ? "bg-[#00f59b]/15 text-[#00f59b] border-[#00f59b]/50"
-              : "bg-secondary/50 text-muted-foreground border-border hover:bg-secondary hover:text-foreground"
-          }`}
-        >
-          Stems Available
-        </button>
+        <div className="flex items-center space-x-3 shrink-0">
+          <span className={`text-sm font-medium transition-colors ${hasStems ? "text-foreground" : "text-muted-foreground"}`}>
+            Stems Available
+          </span>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={hasStems}
+            onClick={() => setHasStems(!hasStems)}
+            className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#00f59b] focus:ring-offset-2 focus:ring-offset-background ${
+              hasStems ? "bg-[#00f59b]" : "bg-secondary"
+            }`}
+          >
+            <span
+              aria-hidden="true"
+              className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                hasStems ? "translate-x-5" : "translate-x-0"
+              }`}
+            />
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">

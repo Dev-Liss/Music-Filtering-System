@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Settings from "./components/Settings";
 import MetadataWizard from "./components/MetadataWizard";
 import LibraryBrowser from "./components/LibraryBrowser";
+import MusicPlayer from "./components/MusicPlayer";
 import {
   Library,
   Settings as SettingsIcon,
@@ -22,10 +23,10 @@ function App() {
   ];
 
   return (
-    <div className="flex h-screen w-full bg-background text-foreground dark overflow-hidden selection:bg-primary/30">
+    <div className="flex h-screen w-full bg-background text-foreground dark overflow-hidden selection:bg-primary/30 pb-24 relative">
       {/* App Sidebar Navigation */}
       <div
-        className={`border-r border-border bg-card flex flex-col justify-between transition-all duration-300 relative overflow-visible ${isCollapsed ? "w-20" : "w-64"}`}
+        className={`border-r border-border bg-card flex flex-col justify-between transition-all duration-300 relative overflow-visible h-full ${isCollapsed ? "w-20" : "w-64"}`}
       >
         <div>
           <div
@@ -124,6 +125,9 @@ function App() {
           {currentView === "browser" && <LibraryBrowser />}
         </div>
       </main>
+
+      {/* Bottom Music Player */}
+      <MusicPlayer />
     </div>
   );
 }

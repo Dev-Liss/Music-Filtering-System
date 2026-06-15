@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { TAXONOMY } from "./TagForm";
-import { Filter, Music, AudioLines, Search, LayoutGrid, List } from "lucide-react";
+import { Filter, Music, AudioLines, Search, LayoutGrid, List, Play } from "lucide-react";
 const TrackCard = ({ track, viewMode }) => {
   const [cover, setCover] = useState(null);
 
@@ -24,15 +24,18 @@ const TrackCard = ({ track, viewMode }) => {
 
   if (viewMode === "list") {
     return (
-      <Card className="hover:border-primary/50 transition-all duration-300 group cursor-pointer bg-card/50 hover:bg-card/80">
+      <Card className="hover:border-primary/50 transition-all duration-300 group cursor-pointer bg-card/50 hover:bg-card/80 relative overflow-hidden">
         <CardContent className="p-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
           <div className="flex items-center gap-4 flex-1 min-w-0 w-full">
-            <div className="w-12 h-12 flex-shrink-0 bg-primary/10 rounded-lg text-primary overflow-hidden flex items-center justify-center shadow-inner">
+            <div className="w-12 h-12 flex-shrink-0 bg-primary/10 rounded-lg text-primary overflow-hidden flex items-center justify-center shadow-inner relative">
               {cover ? (
                 <img src={cover} alt="Cover" className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-500" />
               ) : (
                 <Music className="w-6 h-6" />
               )}
+              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center sm:hidden">
+                <Play className="w-5 h-5 text-white fill-white" />
+              </div>
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-3">
@@ -51,7 +54,7 @@ const TrackCard = ({ track, viewMode }) => {
             </div>
           </div>
           
-          <div className="flex flex-wrap items-center gap-1.5 flex-shrink-0 w-full sm:w-auto justify-end">
+          <div className="flex flex-wrap items-center gap-1.5 flex-shrink-0 w-full sm:w-auto justify-start sm:mr-4">
             {["genres", "moods"].map((cat) => 
               track[cat].length > 0 && track[cat].slice(0, 3).map((tag) => (
                 <Badge key={tag} variant="outline" className="text-xs text-muted-foreground border-border/50 bg-background/50 backdrop-blur-sm whitespace-nowrap">
@@ -60,29 +63,36 @@ const TrackCard = ({ track, viewMode }) => {
               ))
             )}
           </div>
+
+          <button className="hidden sm:flex w-10 h-10 items-center justify-center rounded-full bg-primary/10 text-foreground hover:bg-primary hover:text-primary-foreground transition-all flex-shrink-0 group-hover:scale-110 shadow-sm border border-primary/20">
+            <Play className="w-4 h-4 fill-current translate-x-[1px]" />
+          </button>
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <Card className="hover:border-primary/50 transition-colors group cursor-pointer bg-card/50">
-      <CardContent className="p-5">
+    <Card className="hover:border-primary/50 transition-colors group cursor-pointer bg-card/50 relative overflow-hidden">
+      <CardContent className="p-5 flex flex-col h-full">
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 flex-shrink-0 bg-primary/10 rounded-lg text-primary overflow-hidden flex items-center justify-center">
+            <div className="w-10 h-10 flex-shrink-0 bg-primary/10 rounded-lg text-primary overflow-hidden flex items-center justify-center relative">
               {cover ? (
                 <img
                   src={cover}
                   alt="Cover"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-500"
                 />
               ) : (
                 <Music className="w-5 h-5" />
               )}
+              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center lg:hidden">
+                <Play className="w-4 h-4 text-white fill-white" />
+              </div>
             </div>
             <h3
-              className="font-semibold truncate max-w-[150px]"
+              className="font-semibold truncate max-w-[150px] group-hover:text-primary transition-colors"
               title={track.file_name}
             >
               {track.file_name}
@@ -94,12 +104,12 @@ const TrackCard = ({ track, viewMode }) => {
               className="flex items-center space-x-1 border-primary/20 bg-primary/5 text-primary"
             >
               <AudioLines className="w-3 h-3" />
-              <span>STEMS</span>
+              <span className="text-[10px] uppercase font-bold tracking-wider">STEMS</span>
             </Badge>
           )}
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-3 flex-1">
           {["genres", "moods"].map(
             (cat) =>
               track[cat].length > 0 && (
@@ -108,7 +118,7 @@ const TrackCard = ({ track, viewMode }) => {
                     <Badge
                       key={tag}
                       variant="outline"
-                      className="text-xs text-muted-foreground border-border/50"
+                      className="text-[11px] text-muted-foreground border-border/50 bg-background/50 backdrop-blur-sm"
                     >
                       {tag}
                     </Badge>
@@ -118,10 +128,14 @@ const TrackCard = ({ track, viewMode }) => {
           )}
         </div>
 
-        <div className="mt-4 pt-4 border-t border-border/50 text-xs text-muted-foreground flex justify-between">
-          <span className="truncate" title={track.file_path}>
+        <div className="mt-4 pt-4 border-t border-border/50 flex items-center justify-between relative">
+          <span className="truncate text-xs text-muted-foreground max-w-[80%]" title={track.file_path}>
             {track.file_path.split("\\").pop()?.split("/").pop()}
           </span>
+          
+          <button className="absolute right-0 bottom-0 w-10 h-10 flex items-center justify-center rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-all flex-shrink-0 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 shadow-md">
+             <Play className="w-4 h-4 fill-current translate-x-[1px]" />
+          </button>
         </div>
       </CardContent>
     </Card>

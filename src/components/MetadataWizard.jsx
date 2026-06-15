@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import TagForm from './TagForm';
-import { Card, CardContent } from './ui/card';
-import { Layers } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import TagForm from "./TagForm";
+import { Card, CardContent } from "./ui/card";
+import { Layers } from "lucide-react";
 
 export default function MetadataWizard({ onTagged }) {
   const [pendingTracks, setPendingTracks] = useState([]);
@@ -40,23 +40,25 @@ export default function MetadataWizard({ onTagged }) {
       <div className="p-8 max-w-4xl mx-auto">
         <div className="mb-8">
           <h2 className="text-2xl font-bold tracking-tight">Metadata Wizard</h2>
-          <p className="text-muted-foreground">You have {pendingTracks.length} pending track(s) to tag.</p>
+          <p className="text-muted-foreground">
+            You have {pendingTracks.length} pending track(s) to tag.
+          </p>
         </div>
 
-      <div className="space-y-6">
-        {pendingTracks.map((track, index) => (
-          <Card 
-            key={track.id} 
-            className="shadow-lg border-border/50 bg-card/50 backdrop-blur-sm relative"
-            style={{ zIndex: pendingTracks.length - index }}
-          >
-            <CardContent className="pt-6">
-              <TagForm track={track} onSave={handleSave} />
-            </CardContent>
-          </Card>
-        ))}
+        <div className="space-y-6">
+          {pendingTracks.map((track, index) => (
+            <Card
+              key={track.id}
+              className="shadow-lg border-border/50 bg-card/50 backdrop-blur-sm relative"
+              style={{ zIndex: pendingTracks.length - index }}
+            >
+              <CardContent className="pt-6">
+                <TagForm track={track} onSave={handleSave} />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </div>
-    </div>
     </div>
   );
 }

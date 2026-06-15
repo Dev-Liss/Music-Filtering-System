@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
-import { Music, AudioLines, Play, Pause, Heart } from "lucide-react";
+import { Music, AudioLines, Play, Pause, Heart, Plus, X } from "lucide-react";
 import { usePlayer } from "../contexts/PlayerContext";
 import { useFavorites } from "../contexts/FavoritesContext";
+import { usePlaylists } from "../contexts/PlaylistContext";
 
 const TrackCard = ({ track, viewMode, currentPlaylist }) => {
   const [cover, setCover] = useState(null);
+  const [showPlaylists, setShowPlaylists] = useState(false);
   const { currentTrack, isPlaying, playTrack, togglePlay } = usePlayer();
   const { isFavorite, toggleFavorite } = useFavorites();
+  const { playlists, addTrackToPlaylist } = usePlaylists();
   
   const isCurrentTrack = currentTrack?.id === track.id;
   const isLiked = isFavorite(track.id);
@@ -25,6 +28,17 @@ const TrackCard = ({ track, viewMode, currentPlaylist }) => {
   const handleLikeClick = (e) => {
     e.stopPropagation();
     toggleFavorite(track);
+  };
+
+  const handlePlusClick = (e) => {
+    e.stopPropagation();
+    setShowPlaylists(!showPlaylists);
+  };
+
+  const handleAddToPlaylist = (playlistId, e) => {
+    e.stopPropagation();
+    addTrackToPlaylist(playlistId, track);
+    setShowPlaylists(false);
   };
 
   const PlayIcon = isCurrentTrack && isPlaying ? Pause : Play;
@@ -45,9 +59,17 @@ const TrackCard = ({ track, viewMode, currentPlaylist }) => {
     };
   }, [track.file_path]);
 
+  // Click outside listener to close dropdown
+  useEffect(() => {
+    if (!showPlaylists) return;
+    const handleClickOutside = () => setShowPlaylists(false);
+    window.addEventListener('click', handleClickOutside);
+    return () => window.removeEventListener('click', handleClickOutside);
+  }, [showPlaylists]);
+
   if (viewMode === "list") {
     return (
-      <Card className="hover:border-primary/50 transition-all duration-300 group cursor-pointer bg-card/50 hover:bg-card/80 relative overflow-hidden">
+      <Card className="hover:border-primary/50 transition-all duration-300 group cursor-pointer bg-card/50 hover:bg-card/80 relative overflow-visible">
         <CardContent className="p-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
           <div className="flex items-center gap-4 flex-1 min-w-0 w-full">
             <div className="w-12 h-12 flex-shrink-0 bg-primary/10 rounded-lg text-primary overflow-hidden flex items-center justify-center shadow-inner relative">
@@ -87,7 +109,48 @@ const TrackCard = ({ track, viewMode, currentPlaylist }) => {
             )}
           </div>
 
-          <div className="hidden sm:flex items-center gap-2 flex-shrink-0">
+          <div className="hidden sm:flex items-center gap-2 flex-shrink-0 relative">
+            <button
+              onClick={handlePlusClick}
+              className="w-10 h-10 flex items-center justify-center rounded-full transition-all flex-shrink-0 shadow-sm border bg-primary/5 text-muted-foreground hover:bg-primary/10 border-transparent hover:border-primary/20 hover:text-foreground"
+              title="Add to Playlist"
+            >
+              <Plus className="w-4 h-4" />
+            </button>
+            
+            {showPlaylists && (
+              <div 
+                className="absolute right-[88px] top-full mt-2 w-48 bg-card/95 backdrop-blur-md text-card-foreground rounded-lg shadow-xl border border-border z-50 py-1 overflow-hidden" 
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="px-3 py-2 border-b border-border/50 mb-1">
+                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Add to Playlist</span>
+                </div>
+                <div className="max-h-48 overflow-y-auto custom-scrollbar">
+                  {playlists.length === 0 ? (
+                    <div className="px-3 py-3 text-xs text-muted-foreground text-center">No playlists found.</div>
+                  ) : (
+                    playlists.map(p => {
+                      const isAdded = p.tracks.some(t => t.id === track.id);
+                      return (
+                        <button 
+                          key={p.id}
+                          onClick={(e) => handleAddToPlaylist(p.id, e)}
+                          className={`w-full text-left px-3 py-2 text-sm flex items-center justify-between transition-colors ${
+                            isAdded ? 'opacity-50 cursor-default' : 'hover:bg-primary/20 hover:text-primary'
+                          }`}
+                          disabled={isAdded}
+                        >
+                          <span className="truncate">{p.name}</span>
+                          {isAdded && <span className="text-[10px] uppercase bg-primary/20 text-primary px-1.5 py-0.5 rounded ml-2">Added</span>}
+                        </button>
+                      );
+                    })
+                  )}
+                </div>
+              </div>
+            )}
+
             <button
               onClick={handleLikeClick}
               className={`w-10 h-10 flex items-center justify-center rounded-full transition-all flex-shrink-0 shadow-sm border ${
@@ -95,6 +158,7 @@ const TrackCard = ({ track, viewMode, currentPlaylist }) => {
                   ? "bg-[#ef4444]/15 text-[#ef4444] border-[#ef4444]/50 hover:bg-[#ef4444]/25" 
                   : "bg-primary/5 text-muted-foreground hover:bg-primary/10 border-transparent hover:border-primary/20 hover:text-foreground"
               }`}
+              title="Favorite"
             >
               <Heart className={`w-4 h-4 ${isLiked ? "fill-current" : ""}`} />
             </button>
@@ -179,6 +243,7 @@ const TrackCard = ({ track, viewMode, currentPlaylist }) => {
                   ? "bg-[#ef4444] text-white hover:bg-[#ef4444]/90" 
                   : "bg-background/80 text-foreground hover:bg-background border border-border"
               }`}
+              title="Favorite"
             >
               <Heart className={`w-4 h-4 ${isLiked ? "fill-current" : ""}`} />
             </button>

@@ -3,6 +3,7 @@ import Settings from "./components/Settings";
 import MetadataWizard from "./components/MetadataWizard";
 import LibraryBrowser from "./components/LibraryBrowser";
 import Favorites from "./components/Favorites";
+import Playlists from "./components/Playlists";
 import MusicPlayer from "./components/MusicPlayer";
 import {
   Library,
@@ -12,6 +13,7 @@ import {
   PanelLeftOpen,
   Component,
   Heart,
+  ListMusic,
 } from "lucide-react";
 
 function App() {
@@ -21,6 +23,7 @@ function App() {
   const navItems = [
     { id: "browser", label: "Library Browser", icon: Component },
     { id: "favorites", label: "Favorites", icon: Heart },
+    { id: "playlists", label: "Playlists", icon: ListMusic },
     { id: "wizard", label: "Metadata Queue", icon: LayoutList },
     { id: "settings", label: "Settings", icon: SettingsIcon },
   ];
@@ -127,6 +130,7 @@ function App() {
           {currentView === "wizard" && <MetadataWizard onTagged={() => {}} />}
           {currentView === "browser" && <LibraryBrowser />}
           {currentView === "favorites" && <Favorites />}
+          {currentView === "playlists" && <Playlists />}
         </div>
       </main>
 

@@ -4,6 +4,7 @@ import './index.css'
 import App from './App.jsx'
 import { PlayerProvider } from './contexts/PlayerContext.jsx'
 import { FavoritesProvider } from './contexts/FavoritesContext.jsx'
+import { PlaylistProvider } from './contexts/PlaylistContext.jsx'
 
 if (!window.api) {
   console.log("Injecting mock window.api for browser environments");
@@ -99,10 +100,12 @@ if (!window.api) {
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <FavoritesProvider>
-      <PlayerProvider>
-        <App />
-      </PlayerProvider>
-    </FavoritesProvider>
+    <PlaylistProvider>
+      <FavoritesProvider>
+        <PlayerProvider>
+          <App />
+        </PlayerProvider>
+      </FavoritesProvider>
+    </PlaylistProvider>
   </StrictMode>,
 )

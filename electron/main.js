@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import { initDB, getPendingTracks, getTaggedTracks, updateTrackMetadata } from './database.js';
 import { startWatcher, getWatcherConfig, updateWatcherConfig } from './watcher.js';
 import { parseFile } from 'music-metadata';
+import fs from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -58,6 +59,16 @@ app.whenReady().then(() => {
       return null;
     } catch (error) {
       console.error('Error reading track cover:', error);
+      return null;
+    }
+  });
+
+  ipcMain.handle('get-audio-buffer', async (event, filePath) => {
+    try {
+      const data = await fs.promises.readFile(filePath);
+      return data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength); // ensures clean ArrayBuffer
+    } catch (error) {
+      console.error('Error reading audio buffer:', error);
       return null;
     }
   });

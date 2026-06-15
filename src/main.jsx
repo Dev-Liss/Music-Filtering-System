@@ -89,6 +89,9 @@ if (!window.api) {
     updateWatcherConfig: async (newPath) => {
       localStorage.setItem('mock_watcher_path', newPath);
       return true;
+    },
+    getAudioBuffer: async (filePath) => {
+      return null;
     }
   };
 }

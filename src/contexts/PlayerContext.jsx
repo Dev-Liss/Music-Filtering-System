@@ -10,6 +10,7 @@ export const PlayerProvider = ({ children }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [waveform, setWaveform] = useState(Array.from({ length: 80 }).map(() => 20));
   
   const audioRef = useRef(new Audio());
   
@@ -34,6 +35,7 @@ export const PlayerProvider = ({ children }) => {
   }, [currentIndex, playlist]);
 
   useEffect(() => {
+    let isMounted = true;
     if (currentTrack) {
       // Create a valid file URL
       const fileUrl = `file:///${currentTrack.file_path.replace(/\\/g, '/')}`;
@@ -42,10 +44,55 @@ export const PlayerProvider = ({ children }) => {
       if (isPlaying) {
         audioRef.current.play().catch(e => console.error("Playback failed", e));
       }
+
+      // Extract waveform
+      const extractWaveform = async () => {
+        try {
+          if (!window.api || !window.api.getAudioBuffer) return;
+          const arrayBuffer = await window.api.getAudioBuffer(currentTrack.file_path);
+          if (!arrayBuffer) return;
+          
+          const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+          const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+          
+          const rawData = audioBuffer.getChannelData(0);
+          const samples = 80;
+          const blockSize = Math.floor(rawData.length / samples);
+          const filteredData = [];
+          for (let i = 0; i < samples; i++) {
+            let blockStart = blockSize * i;
+            let sum = 0;
+            for (let j = 0; j < blockSize; j++) {
+              sum = sum + Math.abs(rawData[blockStart + j]);
+            }
+            filteredData.push(sum / blockSize);
+          }
+          
+          const maxVal = Math.max(...filteredData);
+          const multiplier = maxVal ? Math.pow(maxVal, -1) : 1;
+          const normalizedData = filteredData.map(n => Math.max(10, n * multiplier * 100));
+          
+          if (isMounted) {
+            setWaveform(normalizedData);
+          }
+        } catch (err) {
+          console.error("Waveform extraction failed", err);
+          if (isMounted) {
+            setWaveform(Array.from({ length: 80 }).map(() => 20));
+          }
+        }
+      };
+      
+      extractWaveform();
     } else {
       audioRef.current.pause();
       audioRef.current.src = "";
+      if (isMounted) {
+        setWaveform(Array.from({ length: 80 }).map(() => 20));
+      }
     }
+
+    return () => { isMounted = false; };
   }, [currentTrack]);
 
   useEffect(() => {
@@ -107,7 +154,8 @@ export const PlayerProvider = ({ children }) => {
       togglePlay,
       playNext,
       playPrevious,
-      seek
+      seek,
+      waveform
     }}>
       {children}
     </PlayerContext.Provider>

@@ -7,4 +7,5 @@ contextBridge.exposeInMainWorld('api', {
   getWatcherConfig: () => ipcRenderer.invoke('get-watcher-config'),
   updateWatcherConfig: (newPath) => ipcRenderer.invoke('update-watcher-config', newPath),
   getTrackCover: (filePath) => ipcRenderer.invoke('get-track-cover', filePath),
+  getAudioBuffer: (filePath) => ipcRenderer.invoke('get-audio-buffer', filePath),
 });

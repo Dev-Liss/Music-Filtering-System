@@ -3,13 +3,8 @@ import { Play, Pause, SkipBack, SkipForward, Maximize2, Heart, Music } from 'luc
 import { usePlayer } from '../contexts/PlayerContext';
 
 const MusicPlayer = () => {
-  const { currentTrack, isPlaying, togglePlay, playNext, playPrevious, currentTime, duration, seek } = usePlayer();
+  const { currentTrack, isPlaying, togglePlay, playNext, playPrevious, currentTime, duration, seek, waveform } = usePlayer();
   const [cover, setCover] = useState(null);
-
-  // Generate a static waveform array so it doesn't change on re-renders
-  const waveformHeights = useMemo(() => {
-    return Array.from({ length: 80 }).map(() => Math.floor(Math.random() * 80) + 20);
-  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -78,7 +73,7 @@ const MusicPlayer = () => {
           <div className="flex-1 relative h-6 flex items-center group cursor-pointer" onClick={handleSeek}>
             {/* Waveform */}
             <div className="absolute inset-0 flex items-center justify-between gap-[2px]">
-              {waveformHeights.map((height, i) => {
+              {waveform.map((height, i) => {
                 const isActive = i < (progressPercent / 100) * 80;
                 return (
                   <div 

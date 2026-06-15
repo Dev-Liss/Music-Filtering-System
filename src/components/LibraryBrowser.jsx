@@ -2,9 +2,24 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { TAXONOMY } from "./TagForm";
-import { Filter, Music, AudioLines, Search, LayoutGrid, List, Play } from "lucide-react";
-const TrackCard = ({ track, viewMode }) => {
+import { Filter, Music, AudioLines, Search, LayoutGrid, List, Play, Pause } from "lucide-react";
+import { usePlayer } from "../contexts/PlayerContext";
+
+const TrackCard = ({ track, viewMode, currentPlaylist }) => {
   const [cover, setCover] = useState(null);
+  const { currentTrack, isPlaying, playTrack, togglePlay } = usePlayer();
+  const isCurrentTrack = currentTrack?.id === track.id;
+
+  const handlePlayClick = (e) => {
+    e.stopPropagation();
+    if (isCurrentTrack) {
+      togglePlay();
+    } else {
+      playTrack(track, currentPlaylist);
+    }
+  };
+
+  const PlayIcon = isCurrentTrack && isPlaying ? Pause : Play;
 
   useEffect(() => {
     let isMounted = true;
@@ -34,7 +49,7 @@ const TrackCard = ({ track, viewMode }) => {
                 <Music className="w-6 h-6" />
               )}
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center sm:hidden">
-                <Play className="w-5 h-5 text-white fill-white" />
+                <PlayIcon className="w-5 h-5 text-white fill-white" />
               </div>
             </div>
             <div className="flex-1 min-w-0">
@@ -64,8 +79,11 @@ const TrackCard = ({ track, viewMode }) => {
             )}
           </div>
 
-          <button className="hidden sm:flex w-10 h-10 items-center justify-center rounded-full bg-primary/10 text-foreground hover:bg-primary hover:text-primary-foreground transition-all flex-shrink-0 group-hover:scale-110 shadow-sm border border-primary/20">
-            <Play className="w-4 h-4 fill-current translate-x-[1px]" />
+          <button 
+            onClick={handlePlayClick}
+            className="hidden sm:flex w-10 h-10 items-center justify-center rounded-full bg-primary/10 text-foreground hover:bg-primary hover:text-primary-foreground transition-all flex-shrink-0 group-hover:scale-110 shadow-sm border border-primary/20"
+          >
+            <PlayIcon className="w-4 h-4 fill-current translate-x-[1px]" />
           </button>
         </CardContent>
       </Card>
@@ -88,7 +106,7 @@ const TrackCard = ({ track, viewMode }) => {
                 <Music className="w-5 h-5" />
               )}
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center lg:hidden">
-                <Play className="w-4 h-4 text-white fill-white" />
+                <PlayIcon className="w-4 h-4 text-white fill-white" />
               </div>
             </div>
             <h3
@@ -133,8 +151,11 @@ const TrackCard = ({ track, viewMode }) => {
             {track.file_path.split("\\").pop()?.split("/").pop()}
           </span>
           
-          <button className="absolute right-0 bottom-0 w-10 h-10 flex items-center justify-center rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-all flex-shrink-0 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 shadow-md">
-             <Play className="w-4 h-4 fill-current translate-x-[1px]" />
+          <button 
+            onClick={handlePlayClick}
+            className="absolute right-0 bottom-0 w-10 h-10 flex items-center justify-center rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-all flex-shrink-0 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 shadow-md"
+          >
+             <PlayIcon className="w-4 h-4 fill-current translate-x-[1px]" />
           </button>
         </div>
       </CardContent>
@@ -306,7 +327,7 @@ export default function LibraryBrowser() {
 
         <div className={`grid gap-6 transition-all duration-500 ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}>
           {filteredTracks.map((track) => (
-            <TrackCard key={track.id} track={track} viewMode={viewMode} />
+            <TrackCard key={track.id} track={track} viewMode={viewMode} currentPlaylist={filteredTracks} />
           ))}
           {filteredTracks.length === 0 && (
             <div className="col-span-full flex flex-col items-center justify-center p-12 text-muted-foreground border border-dashed rounded-xl border-border/50">

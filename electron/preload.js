@@ -13,4 +13,6 @@ contextBridge.exposeInMainWorld('api', {
   getTrackStems: (trackPath) => ipcRenderer.invoke('get-track-stems', trackPath),
   saveToDownloads: (filePath) => ipcRenderer.invoke('save-to-downloads', filePath),
   selectStems: () => ipcRenderer.invoke('select-stems'),
+  getSaveLocation: () => ipcRenderer.invoke('get-save-location'),
+  updateSaveLocation: (newLocation) => ipcRenderer.invoke('update-save-location', newLocation),
 });

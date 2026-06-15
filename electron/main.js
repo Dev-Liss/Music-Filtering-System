@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain, dialog } from 'electron';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { initDB, getPendingTracks, getTaggedTracks, updateTrackMetadata, ignoreTrack, deleteTrack } from './database.js';
+import { initDB, getPendingTracks, getTaggedTracks, updateTrackMetadata, ignoreTrack, deleteTrack, getSetting, setSetting } from './database.js';
 import { startWatcher, getWatcherConfig, updateWatcherConfig } from './watcher.js';
 import { parseFile } from 'music-metadata';
 import fs from 'fs';
@@ -98,7 +98,7 @@ app.whenReady().then(() => {
 
   ipcMain.handle('save-to-downloads', async (event, filePath) => {
     try {
-      const downloadsPath = app.getPath('downloads');
+      const downloadsPath = getSetting('save_location') || app.getPath('downloads');
       const fileName = path.basename(filePath);
       const destPath = path.join(downloadsPath, fileName);
       
@@ -108,6 +108,13 @@ app.whenReady().then(() => {
       console.error('Error saving to downloads:', error);
       return { success: false, error: error.message };
     }
+  });
+
+  ipcMain.handle('get-save-location', () => getSetting('save_location') || app.getPath('downloads'));
+  
+  ipcMain.handle('update-save-location', (event, newLocation) => {
+    setSetting('save_location', newLocation);
+    return true;
   });
 
   ipcMain.handle('select-stems', async () => {

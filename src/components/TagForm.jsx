@@ -127,7 +127,7 @@ export default function TagForm({ track, onSave }) {
               : "bg-secondary/50 text-muted-foreground border-border hover:bg-secondary hover:text-foreground"
           }`}
         >
-          STEMs Available
+          Stems Available
         </button>
       </div>
 

@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent } from './ui/card';
-import { Badge } from './ui/badge';
-import { TAXONOMY } from './TagForm';
-import { Filter, Music, AudioLines } from 'lucide-react';
-
+import React, { useState, useEffect } from "react";
+import { Card, CardContent } from "./ui/card";
+import { Badge } from "./ui/badge";
+import { TAXONOMY } from "./TagForm";
+import { Filter, Music, AudioLines, Search } from "lucide-react";
 const TrackCard = ({ track }) => {
   const [cover, setCover] = useState(null);
 
@@ -18,7 +17,9 @@ const TrackCard = ({ track }) => {
       }
     };
     fetchCover();
-    return () => { isMounted = false; };
+    return () => {
+      isMounted = false;
+    };
   }, [track.file_path]);
 
   return (
@@ -28,39 +29,56 @@ const TrackCard = ({ track }) => {
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 flex-shrink-0 bg-primary/10 rounded-lg text-primary overflow-hidden flex items-center justify-center">
               {cover ? (
-                <img src={cover} alt="Cover" className="w-full h-full object-cover" />
+                <img
+                  src={cover}
+                  alt="Cover"
+                  className="w-full h-full object-cover"
+                />
               ) : (
                 <Music className="w-5 h-5" />
               )}
             </div>
-            <h3 className="font-semibold truncate max-w-[150px]" title={track.file_name}>
+            <h3
+              className="font-semibold truncate max-w-[150px]"
+              title={track.file_name}
+            >
               {track.file_name}
             </h3>
           </div>
           {track.has_stems && (
-            <Badge variant="secondary" className="flex items-center space-x-1 border-primary/20 bg-primary/5 text-primary">
+            <Badge
+              variant="secondary"
+              className="flex items-center space-x-1 border-primary/20 bg-primary/5 text-primary"
+            >
               <AudioLines className="w-3 h-3" />
               <span>STEMS</span>
             </Badge>
           )}
         </div>
-        
+
         <div className="space-y-3">
-          {['genres', 'moods'].map(cat => (
-            track[cat].length > 0 && (
-              <div key={cat} className="flex flex-wrap gap-1">
-                {track[cat].map(tag => (
-                  <Badge key={tag} variant="outline" className="text-xs text-muted-foreground border-border/50">
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-            )
-          ))}
+          {["genres", "moods"].map(
+            (cat) =>
+              track[cat].length > 0 && (
+                <div key={cat} className="flex flex-wrap gap-1">
+                  {track[cat].map((tag) => (
+                    <Badge
+                      key={tag}
+                      variant="outline"
+                      className="text-xs text-muted-foreground border-border/50"
+                    >
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              ),
+          )}
         </div>
-        
+
         <div className="mt-4 pt-4 border-t border-border/50 text-xs text-muted-foreground flex justify-between">
-          <span className="truncate" title={track.file_path}>{track.file_path.split('\\').pop()?.split('/').pop()}</span>
+          <span className="truncate" title={track.file_path}>
+            {track.file_path.split("\\").pop()?.split("/").pop()}
+          </span>
         </div>
       </CardContent>
     </Card>
@@ -69,11 +87,12 @@ const TrackCard = ({ track }) => {
 
 export default function LibraryBrowser() {
   const [tracks, setTracks] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [filters, setFilters] = useState({
     genres: [],
     moods: [],
     video_themes: [],
-    instruments: []
+    instruments: [],
   });
 
   const fetchTracks = async () => {
@@ -92,24 +111,31 @@ export default function LibraryBrowser() {
       genres: [],
       moods: [],
       video_themes: [],
-      instruments: []
+      instruments: [],
     });
   };
 
   const clearFilterCategory = (category) => {
-    setFilters(prev => ({ ...prev, [category]: [] }));
+    setFilters((prev) => ({ ...prev, [category]: [] }));
   };
 
   const toggleFilter = (category, item) => {
-    setFilters(prev => {
+    setFilters((prev) => {
       const isSelected = prev[category].includes(item);
       if (isSelected) {
-        return { ...prev, [category]: prev[category].filter(i => i !== item) };
+        return {
+          ...prev,
+          [category]: prev[category].filter((i) => i !== item),
+        };
       } else {
         return { ...prev, [category]: [...prev[category], item] };
       }
     });
   };
+
+  const filteredTracks = tracks.filter((track) =>
+    track.file_name.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
 
   return (
     <div className="flex h-full">
@@ -120,7 +146,7 @@ export default function LibraryBrowser() {
             <Filter className="w-5 h-5" />
             <h2 className="font-semibold text-lg">Filters</h2>
           </div>
-          {Object.values(filters).some(arr => arr.length > 0) && (
+          {Object.values(filters).some((arr) => arr.length > 0) && (
             <button
               onClick={clearAllFilters}
               className="shrink-0 inline-flex items-center justify-center px-3 py-1 text-xs font-medium rounded-full border transition-all duration-200 select-none bg-[#ef4444]/15 text-[#ef4444] border-[#ef4444]/50 hover:bg-[#ef4444]/25"
@@ -129,13 +155,13 @@ export default function LibraryBrowser() {
             </button>
           )}
         </div>
-        
+
         <div className="space-y-8">
           {Object.entries(TAXONOMY).map(([category, items]) => (
             <div key={category}>
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-                  {category.replace('_', ' ')}
+                  {category.replace("_", " ")}
                 </h3>
                 {filters[category].length > 0 && (
                   <button
@@ -147,14 +173,24 @@ export default function LibraryBrowser() {
                 )}
               </div>
               <div className="space-y-2">
-                {items.map(item => {
+                {items.map((item) => {
                   const isSelected = filters[category].includes(item);
                   return (
-                    <label key={item} className="flex items-center space-x-3 cursor-pointer group" onClick={() => toggleFilter(category, item)}>
-                      <div className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${isSelected ? 'bg-primary border-primary' : 'border-input group-hover:border-primary/50'}`}>
-                        {isSelected && <div className="w-2 h-2 bg-primary-foreground rounded-sm" />}
+                    <label
+                      key={item}
+                      className="flex items-center space-x-3 cursor-pointer group"
+                      onClick={() => toggleFilter(category, item)}
+                    >
+                      <div
+                        className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${isSelected ? "bg-primary border-primary" : "border-input group-hover:border-primary/50"}`}
+                      >
+                        {isSelected && (
+                          <div className="w-2 h-2 bg-primary-foreground rounded-sm" />
+                        )}
                       </div>
-                      <span className={`text-sm ${isSelected ? 'text-foreground font-medium' : 'text-muted-foreground group-hover:text-foreground'}`}>
+                      <span
+                        className={`text-sm ${isSelected ? "text-foreground font-medium" : "text-muted-foreground group-hover:text-foreground"}`}
+                      >
                         {item}
                       </span>
                     </label>
@@ -168,16 +204,33 @@ export default function LibraryBrowser() {
 
       {/* Main Grid View */}
       <div className="flex-1 p-8 overflow-y-auto bg-background">
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold tracking-tight">Library Browser</h2>
-          <p className="text-muted-foreground">{tracks.length} track(s) found.</p>
+        <div className="mb-8 flex items-center justify-between gap-6 flex-wrap">
+          <div className="flex items-center flex-1 min-w-[300px]">
+            <div className="relative max-w-sm w-full group">
+              {/* Inner search input container */}
+              <div className="relative flex items-center bg-white/10 border border-white/10 rounded-full px-4 py-2 transition-all focus-within:bg-white/15 focus-within:border-primary/50">
+                <Search className="w-4 h-4 text-muted-foreground mr-3 shrink-0" />
+                <input
+                  type="text"
+                  placeholder="Search tracks..."
+                  className="w-full bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground/70 text-sm font-medium"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+
+          <p className="text-sm text-muted-foreground whitespace-nowrap">
+            {filteredTracks.length} track(s) found.
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {tracks.map(track => (
+          {filteredTracks.map((track) => (
             <TrackCard key={track.id} track={track} />
           ))}
-          {tracks.length === 0 && (
+          {filteredTracks.length === 0 && (
             <div className="col-span-full flex flex-col items-center justify-center p-12 text-muted-foreground border border-dashed rounded-xl border-border/50">
               <Filter className="w-12 h-12 mb-4 opacity-20" />
               <p>No tracks match the selected filters.</p>

@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { initDB, getPendingTracks, getTaggedTracks, updateTrackMetadata, ignoreTrack } from './database.js';
+import { initDB, getPendingTracks, getTaggedTracks, updateTrackMetadata, ignoreTrack, deleteTrack } from './database.js';
 import { startWatcher, getWatcherConfig, updateWatcherConfig } from './watcher.js';
 import { parseFile } from 'music-metadata';
 import fs from 'fs';
@@ -42,6 +42,7 @@ app.whenReady().then(() => {
   ipcMain.handle('get-tagged-tracks', (event, filters) => getTaggedTracks(filters));
   ipcMain.handle('update-track-metadata', (event, payload) => updateTrackMetadata(payload));
   ipcMain.handle('ignore-track', (event, id) => ignoreTrack(id));
+  ipcMain.handle('delete-track', (event, id) => deleteTrack(id));
   ipcMain.handle('get-watcher-config', () => getWatcherConfig());
   ipcMain.handle('update-watcher-config', (event, newPath) => {
     updateWatcherConfig(newPath);

@@ -175,7 +175,7 @@ const TrackCard = ({ track, viewMode, currentPlaylist, onClick }) => {
   }
 
   return (
-    <Card onClick={() => onClick && onClick(track)} className="hover:border-primary/50 transition-colors group cursor-pointer bg-card/50 relative overflow-hidden">
+    <Card onClick={() => onClick && onClick(track)} className="hover:border-primary/50 transition-colors group cursor-pointer bg-card/50 relative overflow-visible">
       <CardContent className="p-5 flex flex-col h-full">
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center space-x-3">
@@ -236,6 +236,49 @@ const TrackCard = ({ track, viewMode, currentPlaylist, onClick }) => {
           </span>
           
           <div className="absolute right-0 bottom-0 flex items-center gap-2 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all">
+            <div className="relative">
+              <button
+                onClick={handlePlusClick}
+                className="w-10 h-10 flex items-center justify-center rounded-full shadow-md transition-colors bg-background/80 text-foreground hover:bg-background border border-border"
+                title="Add to Playlist"
+              >
+                <Plus className="w-4 h-4" />
+              </button>
+              
+              {showPlaylists && (
+                <div 
+                  className="absolute bottom-full right-0 mb-2 w-48 bg-card/95 backdrop-blur-md text-card-foreground rounded-lg shadow-xl border border-border z-50 py-1 overflow-hidden" 
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="px-3 py-2 border-b border-border/50 mb-1">
+                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Add to Playlist</span>
+                  </div>
+                  <div className="max-h-48 overflow-y-auto custom-scrollbar">
+                    {playlists.length === 0 ? (
+                      <div className="px-3 py-3 text-xs text-muted-foreground text-center">No playlists found.</div>
+                    ) : (
+                      playlists.map(p => {
+                        const isAdded = p.tracks.some(t => t.id === track.id);
+                        return (
+                          <button 
+                            key={p.id}
+                            onClick={(e) => handleAddToPlaylist(p.id, e)}
+                            className={`w-full text-left px-3 py-2 text-sm flex items-center justify-between transition-colors ${
+                              isAdded ? 'opacity-50 cursor-default' : 'hover:bg-primary/20 hover:text-primary'
+                            }`}
+                            disabled={isAdded}
+                          >
+                            <span className="truncate">{p.name}</span>
+                            {isAdded && <span className="text-[10px] uppercase bg-primary/20 text-primary px-1.5 py-0.5 rounded ml-2">Added</span>}
+                          </button>
+                        );
+                      })
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
             <button
               onClick={handleLikeClick}
               className={`w-10 h-10 flex items-center justify-center rounded-full shadow-md transition-colors ${

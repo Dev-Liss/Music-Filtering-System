@@ -119,6 +119,11 @@ export function ignoreTrack(id) {
   stmt.run(id);
 }
 
+export function deleteTrack(id) {
+  const stmt = db.prepare("DELETE FROM tracks WHERE id = ?");
+  stmt.run(id);
+}
+
 export function addTrackIfNew(fileName, filePath) {
   const checkStmt = db.prepare('SELECT id FROM tracks WHERE file_name = ?');
   const existing = checkStmt.get(fileName);

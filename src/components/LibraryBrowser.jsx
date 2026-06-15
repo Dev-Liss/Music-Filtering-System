@@ -184,6 +184,10 @@ export default function LibraryBrowser() {
         <SongDetailsModal 
           track={selectedTrack} 
           onClose={() => setSelectedTrack(null)} 
+          onDelete={() => {
+            setSelectedTrack(null);
+            fetchTracks();
+          }}
         />
       )}
     </div>

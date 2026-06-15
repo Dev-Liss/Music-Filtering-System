@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 import { PlayerProvider } from './contexts/PlayerContext.jsx'
+import { FavoritesProvider } from './contexts/FavoritesContext.jsx'
 
 if (!window.api) {
   console.log("Injecting mock window.api for browser environments");
@@ -98,8 +99,10 @@ if (!window.api) {
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <PlayerProvider>
-      <App />
-    </PlayerProvider>
+    <FavoritesProvider>
+      <PlayerProvider>
+        <App />
+      </PlayerProvider>
+    </FavoritesProvider>
   </StrictMode>,
 )

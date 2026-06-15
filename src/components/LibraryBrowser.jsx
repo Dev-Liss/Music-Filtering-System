@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { TAXONOMY } from "./TagForm";
-import { Filter, Music, AudioLines, Search } from "lucide-react";
-const TrackCard = ({ track }) => {
+import { Filter, Music, AudioLines, Search, LayoutGrid, List } from "lucide-react";
+const TrackCard = ({ track, viewMode }) => {
   const [cover, setCover] = useState(null);
 
   useEffect(() => {
@@ -21,6 +21,49 @@ const TrackCard = ({ track }) => {
       isMounted = false;
     };
   }, [track.file_path]);
+
+  if (viewMode === "list") {
+    return (
+      <Card className="hover:border-primary/50 transition-all duration-300 group cursor-pointer bg-card/50 hover:bg-card/80">
+        <CardContent className="p-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          <div className="flex items-center gap-4 flex-1 min-w-0 w-full">
+            <div className="w-12 h-12 flex-shrink-0 bg-primary/10 rounded-lg text-primary overflow-hidden flex items-center justify-center shadow-inner">
+              {cover ? (
+                <img src={cover} alt="Cover" className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-500" />
+              ) : (
+                <Music className="w-6 h-6" />
+              )}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-3">
+                <h3 className="font-semibold truncate text-base text-foreground group-hover:text-primary transition-colors" title={track.file_name}>
+                  {track.file_name}
+                </h3>
+                {track.has_stems && (
+                  <Badge variant="secondary" className="h-5 px-1.5 text-[10px] uppercase font-bold tracking-wider border-primary/20 bg-primary/5 text-primary flex-shrink-0">
+                    <AudioLines className="w-3 h-3 mr-1" /> STEMS
+                  </Badge>
+                )}
+              </div>
+              <div className="text-xs text-muted-foreground truncate mt-1" title={track.file_path}>
+                {track.file_path.split("\\").pop()?.split("/").pop()}
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex flex-wrap items-center gap-1.5 flex-shrink-0 w-full sm:w-auto justify-end">
+            {["genres", "moods"].map((cat) => 
+              track[cat].length > 0 && track[cat].slice(0, 3).map((tag) => (
+                <Badge key={tag} variant="outline" className="text-xs text-muted-foreground border-border/50 bg-background/50 backdrop-blur-sm whitespace-nowrap">
+                  {tag}
+                </Badge>
+              ))
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="hover:border-primary/50 transition-colors group cursor-pointer bg-card/50">
@@ -88,6 +131,7 @@ const TrackCard = ({ track }) => {
 export default function LibraryBrowser() {
   const [tracks, setTracks] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [viewMode, setViewMode] = useState("grid");
   const [filters, setFilters] = useState({
     genres: [],
     moods: [],
@@ -221,14 +265,34 @@ export default function LibraryBrowser() {
             </div>
           </div>
 
-          <p className="text-sm text-muted-foreground whitespace-nowrap">
-            {filteredTracks.length} track(s) found.
-          </p>
+          <div className="flex items-center gap-5">
+            <p className="text-sm text-muted-foreground whitespace-nowrap">
+              {filteredTracks.length} track(s) found.
+            </p>
+            
+            {/* View Toggle Button */}
+            <button
+              onClick={() => setViewMode(v => v === 'grid' ? 'list' : 'grid')}
+              className="relative flex items-center justify-center bg-[#292A3A] border border-white/5 overflow-hidden rounded-xl h-[42px] px-4 text-[#B5B8DB] hover:text-[#E2E4F6] hover:bg-[#34354A] transition-all duration-300 active:scale-95 shadow-sm"
+              aria-label="Toggle view"
+            >
+              <div className="flex items-center gap-2.5 relative z-10 w-[72px] justify-center">
+                <div className="relative w-[18px] h-[18px] flex-shrink-0">
+                   <LayoutGrid strokeWidth={2.5} className={`absolute inset-0 w-[18px] h-[18px] transition-all duration-500 origin-center ${viewMode === 'grid' ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-50'}`} />
+                   <List strokeWidth={2.5} className={`absolute inset-0 w-[18px] h-[18px] transition-all duration-500 origin-center ${viewMode === 'list' ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 rotate-90 scale-50'}`} />
+                </div>
+                <div className="relative w-8 h-[20px] overflow-hidden flex-shrink-0">
+                   <span className={`absolute left-0 top-0 w-full transition-all duration-500 font-semibold text-sm text-left tracking-wide ${viewMode === 'grid' ? 'translate-y-0 opacity-100' : 'translate-y-[150%] opacity-0'}`}>Grid</span>
+                   <span className={`absolute left-0 top-0 w-full transition-all duration-500 font-semibold text-sm text-left tracking-wide ${viewMode === 'list' ? 'translate-y-0 opacity-100' : '-translate-y-[150%] opacity-0'}`}>List</span>
+                </div>
+              </div>
+            </button>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className={`grid gap-6 transition-all duration-500 ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}>
           {filteredTracks.map((track) => (
-            <TrackCard key={track.id} track={track} />
+            <TrackCard key={track.id} track={track} viewMode={viewMode} />
           ))}
           {filteredTracks.length === 0 && (
             <div className="col-span-full flex flex-col items-center justify-center p-12 text-muted-foreground border border-dashed rounded-xl border-border/50">

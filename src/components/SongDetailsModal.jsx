@@ -85,7 +85,7 @@ export default function SongDetailsModal({ track, onClose, onDelete }) {
         </button>
 
         {/* Left column: Cover Art */}
-        <div className="md:w-2/5 bg-black/20 relative flex items-center justify-center min-h-[250px] md:min-h-full p-8 overflow-hidden group">
+        <div className="shrink-0 md:w-2/5 bg-black/20 relative flex items-center justify-center min-h-[250px] md:min-h-full p-8 overflow-hidden group">
           {cover ? (
             <>
                <div className="absolute inset-0 blur-3xl opacity-30 bg-cover bg-center scale-150" style={{ backgroundImage: `url(${cover})` }} />
@@ -99,7 +99,7 @@ export default function SongDetailsModal({ track, onClose, onDelete }) {
         </div>
 
         {/* Right column: Details and Actions */}
-        <div className="md:w-3/5 p-8 flex flex-col h-full overflow-y-auto custom-scrollbar">
+        <div className="flex-1 min-h-0 min-w-0 p-8 flex flex-col overflow-y-auto custom-scrollbar">
           <div className="mb-6 flex items-start justify-between gap-4 pr-10">
             <div>
               <h2 className="text-2xl font-bold text-foreground mb-2 leading-tight">

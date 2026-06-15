@@ -66,7 +66,7 @@ export default function Playlists() {
                  <TrackCard track={track} viewMode={viewMode} currentPlaylist={selectedPlaylist.tracks} />
                  <button 
                    onClick={(e) => { e.stopPropagation(); removeTrackFromPlaylist(selectedPlaylist.id, track.id); }} 
-                   className={`absolute z-10 p-2 bg-red-500/90 text-white rounded-full opacity-0 group-hover/track:opacity-100 transition-all hover:bg-red-600 shadow-md ${viewMode === 'grid' ? 'top-2 right-2' : 'top-1/2 -translate-y-1/2 right-2'}`}
+                   className="absolute z-50 p-2 bg-red-500 text-white rounded-full opacity-0 group-hover/track:opacity-100 transition-all hover:bg-red-600 shadow-lg -top-2 -right-2"
                    title="Remove from playlist"
                  >
                    <Trash2 className="w-4 h-4" />

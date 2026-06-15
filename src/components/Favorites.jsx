@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { useFavorites } from "../contexts/FavoritesContext";
 import TrackCard from "./TrackCard";
+import SongDetailsModal from "./SongDetailsModal";
 import { Heart, Search, LayoutGrid, List } from "lucide-react";
 
 export default function Favorites() {
-  const { favorites } = useFavorites();
+  const { favorites, removeFavorite } = useFavorites();
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState("grid");
+  const [selectedTrack, setSelectedTrack] = useState(null);
 
   const filteredTracks = favorites.filter((track) =>
     track.file_name.toLowerCase().includes(searchQuery.toLowerCase()),
@@ -66,7 +68,7 @@ export default function Favorites() {
 
         <div className={`grid gap-6 transition-all duration-500 ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}>
           {filteredTracks.map((track) => (
-            <TrackCard key={track.id} track={track} viewMode={viewMode} currentPlaylist={filteredTracks} />
+            <TrackCard key={track.id} track={track} viewMode={viewMode} currentPlaylist={filteredTracks} onClick={setSelectedTrack} />
           ))}
           {favorites.length === 0 ? (
             <div className="col-span-full flex flex-col items-center justify-center p-12 text-muted-foreground border border-dashed rounded-xl border-border/50">
@@ -81,6 +83,17 @@ export default function Favorites() {
           ) : null}
         </div>
       </div>
+      
+      {selectedTrack && (
+        <SongDetailsModal 
+          track={selectedTrack} 
+          onClose={() => setSelectedTrack(null)} 
+          onDelete={(id) => {
+            removeFavorite(id);
+            setSelectedTrack(null);
+          }}
+        />
+      )}
     </div>
   );
 }

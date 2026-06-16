@@ -1,13 +1,37 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { X, Download, Music, AudioLines, Trash2 } from 'lucide-react';
 import { Badge } from './ui/badge';
+
+const ANIMATION_DURATION = 300; // ms
 
 export default function SongDetailsModal({ track, onClose, onDelete }) {
   const [cover, setCover] = useState(null);
   const [stems, setStems] = useState([]);
   const [isSaving, setIsSaving] = useState(null);
   const [savedItems, setSavedItems] = useState({});
-  
+  const [isVisible, setIsVisible] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
+
+  // Trigger enter animation on mount
+  useEffect(() => {
+    // Force a reflow before setting visible to ensure the initial state is painted
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setIsVisible(true);
+      });
+    });
+  }, []);
+
+  // Animated close handler
+  const handleClose = useCallback(() => {
+    if (isClosing) return;
+    setIsClosing(true);
+    setIsVisible(false);
+    setTimeout(() => {
+      onClose();
+    }, ANIMATION_DURATION);
+  }, [isClosing, onClose]);
+
   const handleDelete = async () => {
     if (window.api && window.api.deleteTrack) {
       if (window.confirm('Are you sure you want to delete this track?')) {
@@ -49,6 +73,15 @@ export default function SongDetailsModal({ track, onClose, onDelete }) {
     return () => { isMounted = false; };
   }, [track]);
 
+  // Close on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') handleClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleClose]);
+
   const handleDownload = async (filePath, id) => {
     if (!window.api || !window.api.saveToDownloads) return;
     
@@ -70,15 +103,38 @@ export default function SongDetailsModal({ track, onClose, onDelete }) {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6" onClick={onClose}>
-      <div className="absolute inset-0 bg-background/80 backdrop-blur-sm transition-opacity" />
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6"
+      onClick={handleClose}
+      style={{
+        pointerEvents: isVisible ? 'auto' : 'none',
+      }}
+    >
+      {/* Backdrop with fade animation */}
+      <div
+        className="absolute inset-0 backdrop-blur-sm"
+        style={{
+          backgroundColor: 'hsl(var(--background) / 0.8)',
+          opacity: isVisible ? 1 : 0,
+          transition: `opacity ${ANIMATION_DURATION}ms cubic-bezier(0.16, 1, 0.3, 1)`,
+        }}
+      />
       
+      {/* Modal card with scale + fade + slide animation */}
       <div 
-        className="relative bg-[#1A1A24]   shadow-2xl rounded-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col md:flex-row transform transition-all"
+        className="relative bg-[#1A1A24] shadow-2xl rounded-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col md:flex-row"
         onClick={e => e.stopPropagation()}
+        style={{
+          opacity: isVisible ? 1 : 0,
+          transform: isVisible
+            ? 'scale(1) translateY(0px)'
+            : 'scale(0.95) translateY(12px)',
+          transition: `opacity ${ANIMATION_DURATION}ms cubic-bezier(0.16, 1, 0.3, 1), transform ${ANIMATION_DURATION}ms cubic-bezier(0.16, 1, 0.3, 1)`,
+          willChange: 'opacity, transform',
+        }}
       >
         <button 
-          onClick={onClose}
+          onClick={handleClose}
           className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-black/20 hover:bg-black/40 text-white/70 hover:text-white transition-all backdrop-blur-md"
         >
           <X className="w-5 h-5" />

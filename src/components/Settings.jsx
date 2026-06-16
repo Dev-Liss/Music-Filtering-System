@@ -34,7 +34,7 @@ export default function Settings() {
 
   return (
     <div className="p-8">
-      <Card className="max-w-xl">
+      <Card className="max-w-xl border border-white/10">
         <CardHeader>
           <CardTitle>System Settings</CardTitle>
         </CardHeader>
@@ -44,7 +44,7 @@ export default function Settings() {
             <Input 
               value={nasPath} 
               onChange={(e) => setNasPath(e.target.value)}
-              className="border-border/50"
+              className="border border-white/10"
               placeholder="D:\TestLocation"
             />
             <p className="text-xs text-[#00f59b] font-medium">
@@ -57,7 +57,7 @@ export default function Settings() {
             <Input 
               value={saveLocation} 
               onChange={(e) => setSaveLocation(e.target.value)}
-              className="border-border/50"
+              className="border border-white/10"
               placeholder="C:\Users\Username\Downloads"
             />
             <p className="text-xs text-[#00f59b] font-medium">

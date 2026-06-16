@@ -56,7 +56,7 @@ export default function MetadataWizard({ onTagged }) {
           {pendingTracks.map((track, index) => (
             <Card
               key={track.id}
-              className="shadow-lg border-border/50 bg-card/50 backdrop-blur-sm relative"
+              className="shadow-lg border border-white/10 bg-card/50 backdrop-blur-sm relative"
               style={{ zIndex: pendingTracks.length - index }}
             >
               <CardContent className="pt-6">

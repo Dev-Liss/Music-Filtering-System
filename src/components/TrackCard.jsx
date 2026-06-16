@@ -69,7 +69,7 @@ const TrackCard = ({ track, viewMode, currentPlaylist, onClick }) => {
 
   if (viewMode === "list") {
     return (
-      <Card onClick={() => onClick && onClick(track)} className="hover:border-primary/50 transition-all duration-300 group cursor-pointer bg-card/50 hover:bg-card/80 relative overflow-visible">
+      <Card onClick={() => onClick && onClick(track)} className="border border-white/10 hover:border-primary/50 transition-all duration-300 group cursor-pointer bg-card/50 hover:bg-card/80 relative overflow-visible">
         <CardContent className="p-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
           <div className="flex items-center gap-4 flex-1 min-w-0 w-full">
             <div className="w-12 h-12 flex-shrink-0 bg-primary/10 rounded-lg text-primary overflow-hidden flex items-center justify-center shadow-inner relative">
@@ -175,7 +175,7 @@ const TrackCard = ({ track, viewMode, currentPlaylist, onClick }) => {
   }
 
   return (
-    <Card onClick={() => onClick && onClick(track)} className="hover:border-primary/50 transition-colors group cursor-pointer bg-card/50 relative overflow-visible">
+    <Card onClick={() => onClick && onClick(track)} className="border border-white/10 hover:border-primary/50 transition-colors group cursor-pointer bg-card/50 relative overflow-visible">
       <CardContent className="p-5 flex flex-col h-full">
         <div className="flex items-start justify-between mb-4 gap-2">
           <div className="flex items-center space-x-3 flex-1 min-w-0">

@@ -221,9 +221,9 @@ export default function TagForm({ track, onSave, onIgnore }) {
         ))}
       </div>
 
-      <div className="pt-4 border-t border-border flex space-x-4">
+      <div className="pt-4   flex space-x-4">
         {onIgnore && (
-          <Button variant="outline" onClick={() => onIgnore(track.id)} className="w-1/3 border-[#ef4444]/50 text-[#ef4444] hover:bg-[#ef4444]/15 hover:text-[#ef4444]">
+          <Button variant="outline" onClick={() => onIgnore(track.id)} className="w-1/3  text-[#ef4444] hover:bg-[#ef4444]/15 hover:text-[#ef4444]">
             Ignore
           </Button>
         )}

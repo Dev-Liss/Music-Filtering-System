@@ -39,7 +39,7 @@ export default function MultiSelect({
       <div
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "flex min-h-[42px] w-full items-center justify-between rounded-lg border border-border bg-[#0d1527]/50 px-3 py-1.5 text-sm cursor-pointer transition-all focus-within:ring-2 focus-within:ring-[#00f59b] focus-within:border-transparent select-none",
+          "flex min-h-[42px] w-full items-center justify-between rounded-lg   bg-[#0d1527]/50 px-3 py-1.5 text-sm cursor-pointer transition-all focus-within:ring-2 focus-within:ring-[#00f59b] focus-within:border-transparent select-none",
           isOpen ? "border-[#00f59b] ring-1 ring-[#00f59b]" : "hover:border-muted-foreground/30 hover:bg-secondary/40"
         )}
         tabIndex={0}
@@ -57,7 +57,7 @@ export default function MultiSelect({
             selected.map((item) => (
               <span
                 key={item}
-                className="inline-flex items-center gap-1 bg-secondary text-foreground text-xs py-0.5 pl-2.5 pr-1.5 rounded-md border border-border/80 hover:border-border transition-colors font-medium"
+                className="inline-flex items-center gap-1 bg-secondary text-foreground text-xs py-0.5 pl-2.5 pr-1.5 rounded-md   hover:border-border transition-colors font-medium"
                 onClick={(e) => e.stopPropagation()}
               >
                 {item}
@@ -83,7 +83,7 @@ export default function MultiSelect({
       </div>
 
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-1.5 z-50 rounded-lg border border-border/50 bg-[#0c1220] backdrop-blur-md shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-1 duration-150">
+        <div className="absolute top-full left-0 right-0 mt-1.5 z-50 rounded-lg   bg-[#0c1220] backdrop-blur-md shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-1 duration-150">
           <div className="max-h-56 overflow-y-auto py-1.5">
             {options.map((option) => {
               const isSelected = selected.includes(option);
@@ -101,7 +101,7 @@ export default function MultiSelect({
                   <div className="flex items-center gap-2.5">
                     <div
                       className={cn(
-                        "w-4 h-4 rounded border flex items-center justify-center transition-all",
+                        "w-4 h-4 rounded  flex items-center justify-center transition-all",
                         isSelected
                           ? "border-[#00f59b] bg-[#00f59b]/15 text-[#00f59b]"
                           : "border-border bg-transparent text-transparent"

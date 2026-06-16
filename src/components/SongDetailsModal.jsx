@@ -74,7 +74,7 @@ export default function SongDetailsModal({ track, onClose, onDelete }) {
       <div className="absolute inset-0 bg-background/80 backdrop-blur-sm transition-opacity" />
       
       <div 
-        className="relative bg-[#1A1A24] border border-white/10 shadow-2xl rounded-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col md:flex-row transform transition-all"
+        className="relative bg-[#1A1A24]   shadow-2xl rounded-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col md:flex-row transform transition-all"
         onClick={e => e.stopPropagation()}
       >
         <button 
@@ -89,10 +89,10 @@ export default function SongDetailsModal({ track, onClose, onDelete }) {
           {cover ? (
             <>
                <div className="absolute inset-0 blur-3xl opacity-30 bg-cover bg-center scale-150" style={{ backgroundImage: `url(${cover})` }} />
-               <img src={cover} alt="Cover" className="w-full aspect-square object-cover rounded-xl shadow-2xl relative z-10 border border-white/5" />
+               <img src={cover} alt="Cover" className="w-full aspect-square object-cover rounded-xl shadow-2xl relative z-10  " />
             </>
           ) : (
-             <div className="w-full aspect-square flex items-center justify-center rounded-xl bg-white/5 border border-white/10 relative z-10">
+             <div className="w-full aspect-square flex items-center justify-center rounded-xl bg-white/5   relative z-10">
                <Music className="w-24 h-24 text-white/10" />
              </div>
           )}
@@ -111,7 +111,7 @@ export default function SongDetailsModal({ track, onClose, onDelete }) {
             </div>
             <button
               onClick={handleDelete}
-              className="shrink-0 flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium text-[#ef4444] bg-[#ef4444]/10 hover:bg-[#ef4444]/20 hover:text-[#fca5a5] transition-colors border border-[#ef4444]/20"
+              className="shrink-0 flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium text-[#ef4444] bg-[#ef4444]/10 hover:bg-[#ef4444]/20 hover:text-[#fca5a5] transition-colors  "
               title="Delete track"
             >
               <Trash2 className="w-4 h-4" />
@@ -132,7 +132,7 @@ export default function SongDetailsModal({ track, onClose, onDelete }) {
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {track[category].map(item => (
-                        <Badge key={item} variant="outline" className="bg-white/5 border-white/10 text-foreground">
+                        <Badge key={item} variant="outline" className="bg-white/5  text-foreground">
                           {item}
                         </Badge>
                       ))}
@@ -143,14 +143,14 @@ export default function SongDetailsModal({ track, onClose, onDelete }) {
             </div>
 
             {/* Save To Section */}
-            <div className="mt-8 pt-6 border-t border-white/10">
+            <div className="mt-8 pt-6  ">
               <h3 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-4 flex items-center gap-2">
                 <Download className="w-4 h-4 text-primary" /> Save to Downloads
               </h3>
               
               <div className="space-y-3">
                 {/* Main Track Download */}
-                <div className="flex items-center justify-between gap-4 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-primary/30 transition-colors">
+                <div className="flex items-center justify-between gap-4 p-3 rounded-xl bg-white/5   hover:border-primary/30 transition-colors">
                   <div className="flex items-center gap-3 flex-1 min-w-0">
                     <div className="w-10 h-10 shrink-0 rounded-lg bg-primary/10 flex items-center justify-center">
                       <Music className="w-5 h-5 text-primary" />
@@ -175,7 +175,7 @@ export default function SongDetailsModal({ track, onClose, onDelete }) {
 
                 {/* Stems */}
                 {track.has_stems && stems.map((stem, idx) => (
-                  <div key={idx} className="flex items-center justify-between gap-4 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-primary/30 transition-colors">
+                  <div key={idx} className="flex items-center justify-between gap-4 p-3 rounded-xl bg-white/5   hover:border-primary/30 transition-colors">
                     <div className="flex items-center gap-3 flex-1 min-w-0">
                       <div className="w-10 h-10 shrink-0 rounded-lg bg-secondary flex items-center justify-center">
                         <AudioLines className="w-5 h-5 text-muted-foreground" />

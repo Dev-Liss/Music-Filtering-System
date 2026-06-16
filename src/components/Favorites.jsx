@@ -29,12 +29,12 @@ export default function Favorites() {
           </div>
           <div className="flex items-center flex-1 min-w-[300px] justify-end">
             <div className="relative max-w-sm w-full group">
-              <div className="relative flex items-center bg-white/10 border border-white/10 rounded-full px-4 py-2 transition-all focus-within:bg-white/15 focus-within:border-primary/50">
+              <div className="relative flex items-center bg-white/10   rounded-full px-4 py-2 transition-all focus-within:bg-white/15 focus-within:border-primary/50">
                 <Search className="w-4 h-4 text-muted-foreground mr-3 shrink-0" />
                 <input
                   type="text"
                   placeholder="Search favorites..."
-                  className="w-full bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground/70 text-sm font-medium"
+                  className="w-full bg-transparent  outline-none text-foreground placeholder:text-muted-foreground/70 text-sm font-medium"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
@@ -49,7 +49,7 @@ export default function Favorites() {
             
             <button
               onClick={() => setViewMode(v => v === 'grid' ? 'list' : 'grid')}
-              className="relative flex items-center justify-center bg-[#292A3A] border border-white/5 overflow-hidden rounded-xl h-[42px] px-4 text-[#B5B8DB] hover:text-[#E2E4F6] hover:bg-[#34354A] transition-all duration-300 active:scale-95 shadow-sm"
+              className="relative flex items-center justify-center bg-[#292A3A]   overflow-hidden rounded-xl h-[42px] px-4 text-[#B5B8DB] hover:text-[#E2E4F6] hover:bg-[#34354A] transition-all duration-300 active:scale-95 shadow-sm"
               aria-label="Toggle view"
             >
               <div className="flex items-center gap-2.5 relative z-10 w-[72px] justify-center">
@@ -71,12 +71,12 @@ export default function Favorites() {
             <TrackCard key={track.id} track={track} viewMode={viewMode} currentPlaylist={filteredTracks} onClick={setSelectedTrack} />
           ))}
           {favorites.length === 0 ? (
-            <div className="col-span-full flex flex-col items-center justify-center p-12 text-muted-foreground border border-dashed rounded-xl border-border/50">
+            <div className="col-span-full flex flex-col items-center justify-center p-12 text-muted-foreground   rounded-xl ">
               <Heart className="w-12 h-12 mb-4 opacity-20" />
               <p>You haven't added any favorite tracks yet.</p>
             </div>
           ) : filteredTracks.length === 0 ? (
-            <div className="col-span-full flex flex-col items-center justify-center p-12 text-muted-foreground border border-dashed rounded-xl border-border/50">
+            <div className="col-span-full flex flex-col items-center justify-center p-12 text-muted-foreground   rounded-xl ">
               <Search className="w-12 h-12 mb-4 opacity-20" />
               <p>No favorites match your search.</p>
             </div>

@@ -43,7 +43,7 @@ export default function Playlists() {
             <div className="flex items-center gap-5">
               <button
                 onClick={() => setViewMode(v => v === 'grid' ? 'list' : 'grid')}
-                className="relative flex items-center justify-center bg-[#292A3A] border border-white/5 overflow-hidden rounded-xl h-[42px] px-4 text-[#B5B8DB] hover:text-[#E2E4F6] hover:bg-[#34354A] transition-all duration-300 active:scale-95 shadow-sm"
+                className="relative flex items-center justify-center bg-[#292A3A]   overflow-hidden rounded-xl h-[42px] px-4 text-[#B5B8DB] hover:text-[#E2E4F6] hover:bg-[#34354A] transition-all duration-300 active:scale-95 shadow-sm"
                 aria-label="Toggle view"
               >
                 <div className="flex items-center gap-2.5 relative z-10 w-[72px] justify-center">
@@ -74,7 +74,7 @@ export default function Playlists() {
               </div>
             ))}
             {selectedPlaylist.tracks.length === 0 && (
-               <div className="col-span-full flex flex-col items-center justify-center p-12 text-muted-foreground border border-dashed rounded-xl border-border/50">
+               <div className="col-span-full flex flex-col items-center justify-center p-12 text-muted-foreground   rounded-xl ">
                  <ListMusic className="w-12 h-12 mb-4 opacity-20" />
                  <p>This playlist is empty.</p>
                  <p className="text-xs mt-2">Add tracks from the Library Browser.</p>
@@ -106,7 +106,7 @@ export default function Playlists() {
                placeholder="New playlist name..." 
                value={newPlaylistName} 
                onChange={e => setNewPlaylistName(e.target.value)} 
-               className="bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-sm text-foreground focus:outline-none focus:border-primary/50 w-48 sm:w-64 transition-all" 
+               className="bg-white/5   rounded-lg px-4 py-2 text-sm text-foreground focus:outline-none focus:border-primary/50 w-48 sm:w-64 transition-all" 
              />
              <button 
                type="submit" 
@@ -121,7 +121,7 @@ export default function Playlists() {
         <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:max-w-6xl">
           {playlists.map(p => (
             <div key={p.id} className="relative group cursor-pointer" onClick={() => setSelectedPlaylistId(p.id)}>
-              <div className="bg-card/50 hover:bg-card border border-border/50 rounded-xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-md flex items-center justify-between">
+              <div className="bg-card/50 border border-white/10 hover:bg-card   rounded-xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-md flex items-center justify-between">
                  <div className="flex items-center gap-4 min-w-0">
                     <div className="w-14 h-14 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:scale-105 transition-transform flex-shrink-0">
                       <ListMusic className="w-6 h-6" />
@@ -143,7 +143,7 @@ export default function Playlists() {
           ))}
           
           {playlists.length === 0 && (
-            <div className="col-span-full flex flex-col items-center justify-center p-12 text-muted-foreground border border-dashed rounded-xl border-border/50 mt-4">
+            <div className="col-span-full flex flex-col items-center justify-center p-12 text-muted-foreground   rounded-xl  mt-4">
               <ListMusic className="w-12 h-12 mb-4 opacity-20" />
               <p>You haven't created any playlists yet.</p>
             </div>

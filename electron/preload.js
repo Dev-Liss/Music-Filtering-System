@@ -15,4 +15,10 @@ contextBridge.exposeInMainWorld('api', {
   selectStems: () => ipcRenderer.invoke('select-stems'),
   getSaveLocation: () => ipcRenderer.invoke('get-save-location'),
   updateSaveLocation: (newLocation) => ipcRenderer.invoke('update-save-location', newLocation),
+  windowControls: {
+    minimize: () => ipcRenderer.invoke('window-minimize'),
+    maximize: () => ipcRenderer.invoke('window-maximize'),
+    close: () => ipcRenderer.invoke('window-close'),
+  },
+  showContextMenu: (type, x, y) => ipcRenderer.invoke('show-context-menu', type, x, y),
 });

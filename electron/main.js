@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, dialog } from "electron";
+import { app, BrowserWindow, ipcMain, dialog, Menu, shell } from "electron";
 import path from "path";
 import { fileURLToPath } from "url";
 import {
@@ -28,6 +28,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
+    frame: false,
     icon: path.join(__dirname, "../build/icon.ico"),
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
@@ -59,6 +60,43 @@ app.whenReady().then(() => {
   ipcMain.handle("update-track-metadata", (event, payload) =>
     updateTrackMetadata(payload),
   );
+
+  ipcMain.handle("window-minimize", () => {
+    if (mainWindow) mainWindow.minimize();
+  });
+  
+  ipcMain.handle("window-maximize", () => {
+    if (mainWindow) {
+      if (mainWindow.isMaximized()) mainWindow.unmaximize();
+      else mainWindow.maximize();
+    }
+  });
+  
+  ipcMain.handle("window-close", () => {
+    if (mainWindow) mainWindow.close();
+  });
+
+  ipcMain.handle("show-context-menu", (event, type, x, y) => {
+    const template = [
+      { role: 'fileMenu' },
+      { role: 'editMenu' },
+      { role: 'viewMenu' },
+      { role: 'windowMenu' },
+      {
+        role: 'help',
+        submenu: [
+          {
+            label: 'Learn More',
+            click: async () => {
+              await shell.openExternal('https://github.com/Dev-Liss/Music-Filtering-System')
+            }
+          }
+        ]
+      }
+    ];
+    const menu = Menu.buildFromTemplate(template);
+    menu.popup({ window: mainWindow, x: Math.round(x), y: Math.round(y) });
+  });
   ipcMain.handle("ignore-track", (event, id) => ignoreTrack(id));
   ipcMain.handle("delete-track", (event, id) => deleteTrack(id));
   ipcMain.handle("get-watcher-config", () => getWatcherConfig());

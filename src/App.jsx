@@ -5,6 +5,7 @@ import LibraryBrowser from "./components/LibraryBrowser";
 import Favorites from "./components/Favorites";
 import Playlists from "./components/Playlists";
 import MusicPlayer from "./components/MusicPlayer";
+import TitleBar from "./components/TitleBar";
 import {
   Library,
   Settings as SettingsIcon,
@@ -29,7 +30,9 @@ function App() {
   ];
 
   return (
-    <div className="flex h-screen w-full bg-background text-foreground dark overflow-hidden selection:bg-primary/30 pb-24 relative">
+    <div className="flex flex-col h-screen w-full bg-background text-foreground dark overflow-hidden selection:bg-primary/30 relative">
+      <TitleBar />
+      <div className="flex flex-1 overflow-hidden pb-24 relative w-full">
       {/* App Sidebar Navigation */}
       <div
         className={`border-r border-border bg-card flex flex-col justify-between transition-all duration-300 relative overflow-visible h-full ${isCollapsed ? "w-20" : "w-64"}`}
@@ -136,6 +139,7 @@ function App() {
 
       {/* Bottom Music Player */}
       <MusicPlayer />
+      </div>
     </div>
   );
 }

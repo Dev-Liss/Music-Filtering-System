@@ -177,8 +177,8 @@ const TrackCard = ({ track, viewMode, currentPlaylist, onClick }) => {
   return (
     <Card onClick={() => onClick && onClick(track)} className="hover:border-primary/50 transition-colors group cursor-pointer bg-card/50 relative overflow-visible">
       <CardContent className="p-5 flex flex-col h-full">
-        <div className="flex items-start justify-between mb-4">
-          <div className="flex items-center space-x-3">
+        <div className="flex items-start justify-between mb-4 gap-2">
+          <div className="flex items-center space-x-3 flex-1 min-w-0">
             <div className="w-10 h-10 flex-shrink-0 bg-primary/10 rounded-lg text-primary overflow-hidden flex items-center justify-center relative">
               {cover ? (
                 <img
@@ -194,7 +194,7 @@ const TrackCard = ({ track, viewMode, currentPlaylist, onClick }) => {
               </div>
             </div>
             <h3
-              className="font-semibold truncate max-w-[130px] group-hover:text-primary transition-colors"
+              className="font-semibold truncate flex-1 group-hover:text-primary transition-colors"
               title={track.file_name}
             >
               {track.file_name}

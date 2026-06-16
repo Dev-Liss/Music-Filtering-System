@@ -30,12 +30,12 @@ function App() {
   ];
 
   return (
-    <div className="flex flex-col h-screen w-full bg-background text-foreground dark overflow-hidden selection:bg-primary/30 relative">
+    <div className="flex flex-col h-screen w-full bg-black text-foreground dark overflow-hidden selection:bg-primary/30 relative">
       <TitleBar />
-      <div className="flex flex-1 overflow-hidden pb-24 relative w-full">
+      <div className="flex flex-1 overflow-hidden p-2 pb-[104px] gap-2 relative w-full">
       {/* App Sidebar Navigation */}
       <div
-        className={`border-r border-border bg-card flex flex-col justify-between transition-all duration-300 relative overflow-visible h-full ${isCollapsed ? "w-20" : "w-64"}`}
+        className={`rounded-xl border border-white/5 bg-background flex flex-col justify-between transition-all duration-300 relative overflow-visible h-full ${isCollapsed ? "w-20" : "w-64"}`}
       >
         <div>
           <div
@@ -124,7 +124,7 @@ function App() {
       </div>
 
       {/* Main Content Area */}
-      <main className="flex-1 h-full overflow-hidden relative">
+      <main className="flex-1 h-full overflow-hidden relative rounded-xl border border-white/5 bg-background">
         {/* Subtle background gradient */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-background pointer-events-none" />
 
